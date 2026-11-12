@@ -16,10 +16,25 @@ Este PC **no toca la base de datos**: lee la configuración del PC-servidor por 
 | `vision/calibrar_hsv.py`, `vision/listar_camaras.py` | Calibrar la visión y encontrar la webcam |
 | `herramientas/comparar_motores.py` | IA vs OpenCV en las fotos guardadas |
 | `tests/` | Pruebas unitarias (`python -m pytest tests`) |
+| `INICIAR_IA.bat` / `INICIAR_IA_SIN_CAMARA.bat` | Levantar la visión con doble clic (con cámara o simulada) |
+| `scripts/iniciar_ia.ps1` | El script que usan los `.bat` |
 | `comun/` | Configuración (`.env`) y tópicos MQTT |
 | `data/imagenes/` | Copia de cada foto, sirve de dataset (no se sube a git) |
 
-## Instalar (una vez)
+## Levantar: doble clic en `INICIAR_IA.bat`
+
+Hace todo solo:
+
+1. La primera vez crea el entorno de Python e instala las librerías (PyTorch pesa ~2,5 GB: 10–20 min).
+2. Si no hay `.env`, lo crea y pregunta la **IP del PC-servidor** (la muestra `INICIAR_SERVIDOR.bat` en ese PC).
+3. Comprueba que llega al broker y a la API del servidor. Si no llega (por ejemplo, cambió la red), pide la IP nueva.
+4. Levanta la visión con la webcam. Tecla `q` en la ventana de la cámara = cerrar.
+
+**`INICIAR_IA_SIN_CAMARA.bat`** hace lo mismo pero dibuja manzanas falsas: sirve para probar el sistema sin cámara.
+
+La primera vez que se usa la IA descarga el modelo CLIP (~600 MB) y la primera foto tarda ~2 s mientras se calienta la GPU; después, ~0,2 s por manzana.
+
+## Instalar a mano (si no se usa el .bat)
 
 Copiar esta carpeta `ia/` al PC-IA y, en PowerShell dentro de ella:
 

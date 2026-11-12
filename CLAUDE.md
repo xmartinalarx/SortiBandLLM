@@ -442,7 +442,9 @@ python -m vision.calibrar_hsv                       # calibrar la visión con la
 # PC-IA, desde ia/: dependencias (PyTorch con CUDA + transformers). PYTHONUTF8 evita un error de pip con tildes.
 $env:PYTHONUTF8 = "1"; pip install -r requirements.txt -r requirements-ia.txt
 # PC-servidor: doble clic en servidor/INICIAR_SERVIDOR.bat (instala si falta, levanta Mosquitto, MySQL y la API, abre el dashboard)
-#   y servidor/DETENER_SERVIDOR.bat para apagar (MySQL de forma ordenada). Instalación sola, desde servidor/:
+#   y servidor/DETENER_SERVIDOR.bat para apagar (MySQL de forma ordenada).
+# PC-IA: doble clic en ia/INICIAR_IA.bat (instala si falta, pide la IP del servidor, comprueba la conexión y levanta la visión)
+#   o ia/INICIAR_IA_SIN_CAMARA.bat (visión simulada). Instalación sola del PC-servidor, desde servidor/:
 powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1
 ```
 

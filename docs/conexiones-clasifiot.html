@@ -608,7 +608,7 @@ footer { font-size: 0.82rem; color: var(--muted); }
       ["Instalar Mosquitto", "el comando mosquitto existe en una terminal nueva.", "https://mosquitto.org/download/"],
       ["Abrir los puertos en el firewall", "PowerShell como administrador responde “Correcto”. Repite cambiando 1883 por 8000 (para el celular).",
         'netsh advfirewall firewall add rule name="Mosquitto 1883" dir=in action=allow protocol=TCP localport=1883'],
-      ["Elegir la webcam del PC", "se ve la imagen real, sin efectos de NVIDIA. Pon ese número en CAMERA_INDEX del .env.", "python -m vision.listar_camaras --ver 0"],
+      ["Elegir la webcam del PC (carpeta ia)", "se ve la imagen real, sin efectos de NVIDIA. Pon ese número en CAMERA_INDEX de ia/.env.", "python -m vision.listar_camaras --ver 0"],
       ["Anotar la IP del PC", "la “Dirección IPv4” del WiFi. Puede cambiar de un día a otro.", "ipconfig"]
     ]},
     { titulo: "2 · Preparar el Arduino", pasos: [
@@ -617,10 +617,10 @@ footer { font-size: 0.82rem; color: var(--muted); }
       ["Activar el modo banco", "en config.h queda sin comentar la línea #define MODO_BANCO."]
     ]},
     { titulo: "3 · Encender de a un nodo", pasos: [
-      ["Terminal 1: broker", "dice “Opening ipv4 listen socket on port 1883”.", "mosquitto -c server/mosquitto/mosquitto.conf -v"],
+      ["Terminal 1 (carpeta servidor): broker", "dice “Opening ipv4 listen socket on port 1883”.", "mosquitto -c server/mosquitto/mosquitto.conf -v"],
       ["Terminal 2: ver los mensajes", "queda esperando: aquí aparece todo lo que viaja.", 'mosquitto_sub -h localhost -t "sorter/#" -v'],
-      ["Terminal 3: servidor", "en http://localhost:8000 dice “MQTT: conectado” y “BD: conectada”.", "python -m server.api.main"],
-      ["Terminal 4: visión", "dice “Visión lista (webcam 0)”.", "python -m vision.clasificador"],
+      ["Terminal 3 (carpeta servidor): servidor", "en http://localhost:8000 dice “MQTT: conectado” y “BD: conectada”.", "python -m server.api.main"],
+      ["Terminal 4 (carpeta ia): visión", "dice “Visión lista (webcam 0)”.", "python -m vision.clasificador"],
       ["Subir el firmware (solo USB, cargador desenchufado)", "el Monitor Serie (115200) dice “WiFi conectado” y “MQTT conectado”; el dashboard muestra “banda: detenida”."],
       ["Iniciar y simular una manzana", "aprieta Iniciar y escribe m en el Monitor Serie: aparecen arrival → result → diverted con el mismo número, y los LEDs A–D de la ULN2003 parpadean."],
       ["Desenchufar el USB", "a los pocos segundos el dashboard muestra “banda: sin conexión”."],
@@ -628,7 +628,7 @@ footer { font-size: 0.82rem; color: var(--muted); }
       ["Apretar el botón de emergencia", "la banda se detiene, el dashboard muestra EMERGENCIA y en la terminal 2 aparece sorter/emergency."],
       ["Quitar el modo banco y montar la banda", "al pasar la mano por el sensor IR, el Monitor Serie dice “Manzana en el sensor IR”."],
       ["Mover la banda montada", "con Iniciar la banda avanza sin trabarse, primero vacía y después con manzanas. Si el motor zumba y no avanza, baja la velocidad a 20 mm/s."],
-      ["Prueba completa con manzanas", "termina en “RESULTADO: OK”.", "python -m herramientas.verificar_flujo --manzanas 10"]
+      ["Prueba completa con manzanas (carpeta servidor)", "termina en “RESULTADO: OK”.", "python -m herramientas.verificar_flujo --manzanas 10"]
     ]}
   ];
   const CLAVE = "clasifiot-encender-v2";

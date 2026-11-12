@@ -1,4 +1,8 @@
-"""Tópicos MQTT del sistema. Deben coincidir con CLAUDE.md y con el firmware."""
+"""Tópicos MQTT del sistema. Deben coincidir con CLAUDE.md y con el firmware.
+
+Hay una copia de este archivo en servidor/comun y otra en ia/comun: si se cambia
+un tópico, cambiarlo en las dos (y en el firmware).
+"""
 import json
 import time
 
@@ -12,6 +16,10 @@ SUPERVISION = "sorter/supervision/event"  # Supervisor LLM (fuera del MVP)
 EMERGENCY = "sorter/emergency"         # Cualquier nodo
 
 TODOS = "sorter/#"
+
+# Colores que puede informar la visión en `sorter/vision/result` (perfiles manzana y lata).
+# Esta lista está en servidor/comun y en ia/comun: si se cambia, cambiarla en las dos.
+COLORES = ("rojo", "naranjo", "amarillo", "verde", "azul")
 
 
 def ahora() -> float:

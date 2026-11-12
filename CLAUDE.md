@@ -28,7 +28,7 @@ Los pequeños productores clasifican la fruta a mano, lo que es lento, cansador 
 - **Producto:** manzanas de 7 a 8,5 cm y 150 a 250 g.
 - **Salidas:** 3. Salida 1 (derecha, paleta 1): defectuosas. Salida 2 (izquierda, paleta 2): grupo de colores A (configurable). Salida 3 (final de la banda): resto.
 - **Flujo:** una manzana a la vez bajo la cámara, separadas al menos ~280 mm.
-- **Clasificación:** la decide un modelo de IA de **Hugging Face** (CLIP zero-shot, `vision/modelo_ia.py`) en el PC-IA, con la GPU. Compara la foto con frases (`vision/prompts_ia.json`) para el color y para sana/dañada. OpenCV (HSV, `vision/analisis.py`) queda de respaldo automático y para recortar el producto. Todo motor respeta el contrato de `vision/analisis.py::clasificar_imagen` (entra una imagen BGR; sale `color`, `is_defective`, `confidence`, `bbox`). Las fotos de cada manzana se guardan sin dibujos en `data/imagenes/` y sirven de dataset.
+- **Clasificación:** la decide un modelo de IA de **Hugging Face** (CLIP zero-shot, `ia/vision/modelo_ia.py`) en el PC-IA, con la GPU. Compara la foto con frases (`ia/vision/prompts_ia.json`) para el color y para sana/dañada. OpenCV (HSV, `ia/vision/analisis.py`) queda de respaldo automático y para recortar el producto. Todo motor respeta el contrato de `ia/vision/analisis.py::clasificar_imagen` (entra una imagen BGR; sale `color`, `is_defective`, `confidence`, `bbox`). Las fotos de cada manzana se guardan sin dibujos en `data/imagenes/` y sirven de dataset.
 - **Prioridad si falta tiempo:** banda y clasificación local → BD y dashboard → supervisión con Ollama. Los reportes en lenguaje natural quedan fuera del MVP.
 
 ## Arquitectura
@@ -41,7 +41,7 @@ Los pequeños productores clasifican la fruta a mano, lo que es lento, cansador 
 | Supervisión | Segunda webcam USB en un poste (por confirmar) | Foto de vista general para el supervisor | USB al PC |
 | Usuario | Navegador en PC o celular | Ver datos y controlar la banda | HTTP |
 
-**Dos equipos:** el PC-IA solo corre la cámara y la IA; el PC-servidor corre todo lo demás. El PC-IA no toca la BD: lee la configuración con `GET /api/settings` y sube cada foto con `POST /api/imagenes` (variable `SERVER_URL` en su `.env`). Si `SERVER_URL` está vacío, todo corre en un solo PC como antes. Instalación del PC-servidor: `scripts/instalar_servidor.ps1`.
+**Dos equipos, dos carpetas:** el código está separado en `servidor/` (se copia al PC-servidor) e `ia/` (se copia al PC-IA). Cada carpeta tiene su `.env`, `requirements.txt`, entorno de Python y `LEEME.md`, y se levanta sola. El PC-IA no toca la BD: lee la configuración con `GET /api/settings` y sube cada foto con `POST /api/imagenes` (`SERVER_URL` y `MQTT_HOST` en `ia/.env` = IP del PC-servidor). Para probar en un solo PC se levantan las dos carpetas con `localhost`. Instalación del PC-servidor: `servidor/scripts/instalar_servidor.ps1`.
 
 La clasificación usará una **webcam USB externa** montada en el túnel y conectada al PC. **Por ahora se usa la webcam integrada del PC** (`CAMERA_INDEX=0`) hasta tener la externa. Evitar la cámara virtual de NVIDIA Broadcast: aplica efectos y cambia los colores. Su índice se configura en `CAMERA_INDEX` (`.env`); para encontrarlo: `python -m vision.listar_camaras`. La Raspberry Pi como nodo de visión independiente queda para una versión posterior.
 
@@ -53,7 +53,7 @@ La clasificación usará una **webcam USB externa** montada en el túnel y conec
 4. El Arduino cierra la paleta correspondiente según los mm avanzados (no según la hora) y la mantiene cerrada mientras sale. Si el resultado no llega antes del punto de cierre de la paleta 1, la manzana va a la salida 3.
 5. El Arduino publica `sorter/control/diverted` con la salida real, el PC registra la manzana en la BD y el dashboard se actualiza.
 
-**Seguimiento por pasos del motor:** como el Arduino mueve el 28BYJ-48 (cada medio paso lo da un timer por hardware), sabe cuántos mm avanzó cada manzana. Así no depende de relojes sincronizados, del retardo de MQTT ni de cambios de velocidad. Distancias en `firmware/control_uno_r4/config.h` (iguales en `simulador/sim_control.py`).
+**Seguimiento por pasos del motor:** como el Arduino mueve el 28BYJ-48 (cada medio paso lo da un timer por hardware), sabe cuántos mm avanzó cada manzana. Así no depende de relojes sincronizados, del retardo de MQTT ni de cambios de velocidad. Distancias en `firmware/control_uno_r4/config.h` (iguales en `servidor/simulador/sim_control.py`).
 
 ### Tiempos (a 30 mm/s, velocidad por defecto del 28BYJ-48)
 
@@ -70,7 +70,7 @@ La clasificación usará una **webcam USB externa** montada en el túnel y conec
 
 ## Reglas de diseño de IA
 
-1. **La clasificación de cada manzana es visión local, no LLM.** Un modelo de Hugging Face (CLIP) corre en la GPU del PC-IA: ~20–50 ms por foto y sin internet una vez descargado. Si la IA no carga o falla, decide OpenCV (`crear_motor` en `vision/modelo_ia.py`).
+1. **La clasificación de cada manzana es visión local, no LLM.** Un modelo de Hugging Face (CLIP) corre en la GPU del PC-IA: ~20–50 ms por foto y sin internet una vez descargado. Si la IA no carga o falla, decide OpenCV (`crear_motor` en `ia/vision/modelo_ia.py`).
 2. **El LLM es un supervisor asíncrono.** Recibe una foto de la cámara de supervisión cada 10–30 s, o ante un evento (banda en marcha sin manzanas, varias seguidas con baja confianza, alza de defectuosas). Nunca está en el camino crítico.
 3. **Ollama local** en el mismo PC, sin internet ni clave de API. El modelo debe ser de visión (por ejemplo, Gemma 3 o Qwen2.5-VL en versión pequeña).
 4. **Respuesta estructurada:** pasar el esquema JSON en el parámetro `format` de Ollama y usar temperatura 0. Esquema: `{"status": "normal|jam|foreign_object|other", "description": "...", "recommend_stop": true|false}`. Validar el JSON y manejar timeouts y respuestas inválidas.
@@ -98,7 +98,7 @@ La clasificación usará una **webcam USB externa** montada en el túnel y conec
 
 ## Base de datos
 
-- **Motor:** MySQL 8. Esquema en `server/db/schema.sql`.
+- **Motor:** MySQL 8. Esquema en `servidor/server/db/schema.sql`.
 - **Ubicación:** servidor del laboratorio de Hardware; durante el desarrollo, copia local en el PC.
 - **Imágenes:** se guarda la ruta, no la imagen.
 
@@ -115,7 +115,7 @@ La clasificación usará una **webcam USB externa** montada en el túnel y conec
 
 - **Muestra:** total procesado, conteo y % por color, % de defectuosas, manzanas por minuto, confianza promedio, estado y velocidad de la banda, historial, fotos de rechazadas y línea de tiempo del supervisor.
 - **Controla:** iniciar/detener, velocidad, mapeo color → salida, parada de emergencia y **prueba de servos** (abrir, cerrar, probar o mover a un ángulo cada paleta; el Arduino confirma; solo con la banda detenida).
-- **Tecnología:** FastAPI (`server/api`) sirve la API y la página (`web/`, HTML + JS sin frameworks, consulta la API cada 1,5 s).
+- **Tecnología:** FastAPI (`servidor/server/api`) sirve la API y la página (`servidor/web/`, HTML + JS sin frameworks, consulta la API cada 1,5 s).
 
 ## Mecánica (impresa en 3D)
 
@@ -247,25 +247,34 @@ proyecto-final/
 │           └── impresion/       # REPARTO.md y persona_1 … persona_4
 ├── firmware/
 │   └── control_uno_r4/          # Arduino UNO R4 WiFi
-├── comun/                       # config (.env), tópicos MQTT y conexión a MySQL
-├── vision/                      # modelo_ia.py (CLIP), prompts_ia.json, analisis.py (OpenCV), reglas.py, clasificador.py, calibrar_hsv.py, listar_camaras.py
-├── simulador/                   # sim_control.py: reemplaza al Arduino para probar sin hardware
-├── server/
-│   ├── api/                     # FastAPI + puente MQTT -> MySQL
-│   ├── db/                      # schema.sql
-│   ├── supervisor/              # cliente de Ollama (fuera del MVP)
-│   └── mosquitto/               # mosquitto.conf
-├── web/                         # dashboard
-├── herramientas/                # verificar_flujo.py (punta a punta), comparar_motores.py (IA vs OpenCV)
-├── scripts/                     # instalar_servidor.ps1 (deja listo el PC-servidor)
-└── tests/                       # pytest
+├── servidor/                    # PC-SERVIDOR (se copia a ese PC; ver servidor/LEEME.md)
+│   ├── comun/                   # config (.env), tópicos MQTT (+ COLORES) y conexión a MySQL
+│   ├── server/
+│   │   ├── api/                 # FastAPI + puente MQTT -> MySQL
+│   │   ├── db/                  # schema.sql
+│   │   ├── supervisor/          # cliente de Ollama (fuera del MVP)
+│   │   └── mosquitto/           # mosquitto.conf
+│   ├── web/                     # dashboard
+│   ├── simulador/               # sim_control.py: reemplaza al Arduino para probar sin hardware
+│   ├── herramientas/            # verificar_flujo.py (punta a punta)
+│   ├── scripts/                 # instalar_servidor.ps1 (deja listo el PC-servidor)
+│   ├── data/imagenes/           # fotos que sube el PC-IA
+│   └── requirements.txt, .env.example, LEEME.md
+└── ia/                          # PC-IA (se copia a ese PC; ver ia/LEEME.md)
+    ├── comun/                   # config (.env) y tópicos MQTT (+ COLORES): copia de servidor/comun/topicos.py
+    ├── vision/                  # clasificador.py, modelo_ia.py (CLIP), prompts_ia.json, analisis.py (OpenCV), reglas.py, calibrar_hsv.py, listar_camaras.py
+    ├── herramientas/            # comparar_motores.py (IA vs OpenCV)
+    ├── tests/                   # pytest
+    ├── data/imagenes/           # copia de cada foto (dataset)
+    └── requirements.txt, requirements-ia.txt, .env.example, LEEME.md
 ```
 
 ## Convenciones
 
 - Documentación, comentarios, commits y textos de la interfaz en español.
 - Identificadores de código, tópicos MQTT, claves JSON y columnas de BD en inglés (`snake_case`).
-- Secretos solo en `.env`, nunca en el repositorio. Mantener `.env.example` al día.
+- Secretos solo en `.env` (uno en `servidor/` y otro en `ia/`), nunca en el repositorio. Mantener los dos `.env.example` al día.
+- `comun/topicos.py` está duplicado en `servidor/comun/` e `ia/comun/` (para que cada carpeta funcione sola): todo cambio de tópicos o de `COLORES` se hace en los dos y en el firmware. El servidor no importa nada de `ia/` ni al revés.
 - Cada componente debe poder probarse sin hardware (modo simulación que publique resultados falsos por MQTT).
 - Código simple y comentado donde no sea obvio: el equipo debe poder explicarlo en la evaluación.
 - Todo cambio en tópicos, payloads, tablas o medidas se actualiza en este archivo.
@@ -315,6 +324,7 @@ Registrar una matriz de confusión (color real vs. clasificado; buena vs. defect
 | Impresora genérica tipo Ender-3 → Ender-3 V3 KE del laboratorio, G-code `_v2` | Es la máquina real; los G-code v1 daban el error key:2111 |
 | Agujero del eslabón 2,0 → 2,1 mm | Con 2,0 mm el pasador se traba en las 9 bisagras |
 | Repositorio `Reicas23/IOT-PROYECT` → `xmartinalarx/SortiBandLLM` | El oficial es SortiBandLLM (2026-11-12) |
+| Código en la raíz → carpetas `servidor/` e `ia/` | Cada PC recibe solo lo suyo y se levanta solo; `comun/topicos.py` queda duplicado. El PC-IA ya no lee MySQL (2026-11-12) |
 
 ## Decisiones
 
@@ -351,12 +361,12 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 | Red | Hotspot del celular **POCOX7Pro** (2,4 GHz), red elegida por el grupo. La red de la U no sirve (5 GHz, abierta). Si el hotspot aísla a los equipos, reiniciarlo (ver Problemas conocidos) |
 | Broker | Mosquitto instalado como servicio de Windows, con `listener 1883 0.0.0.0` en su `mosquitto.conf` |
 | BD | MariaDB de XAMPP (compatible con MySQL 8), base `clasifiot` |
-| Visión | Webcam integrada del PC (`CAMERA_INDEX=0`), ventana en vivo con rectángulo; perfil `PRODUCTO=manzana` con `vision/calibracion_manzana.json` (verde desde tono 23) |
+| Visión | Webcam integrada del PC (`CAMERA_INDEX=0`), ventana en vivo con rectángulo; perfil `PRODUCTO=manzana` con `ia/vision/calibracion_manzana.json` (verde desde tono 23) |
 | Producto de prueba | **Manzana real** desde el 2026-11-05: manzana verde → "verde, sana, 0,99" → salida 3. El perfil `lata` (latas de bebida) queda disponible con `PRODUCTO=lata` |
 | Motor | 28BYJ-48 + ULN2003, 30 mm/s. **No probado con la banda cargada** (riesgo de fuerza) |
 
 **Próximos pasos:**
-1. Probar más manzanas (rojas, amarillas, con manchas reales) y ajustar `vision/calibracion_manzana.json`; anotar `true_color`/`true_defective` para la matriz de confusión.
+1. Probar más manzanas (rojas, amarillas, con manchas reales) y ajustar `ia/vision/calibracion_manzana.json`; anotar `true_color`/`true_defective` para la matriz de confusión.
 2. Confirmar físicamente LEDs A–D, giro del motor y movimiento de los servos (con el cargador enchufado).
 3. Conectar el sensor IR, quitar `MODO_BANCO` y montar la banda.
 4. Probar si el 28BYJ-48 mueve la banda cargada.
@@ -374,7 +384,7 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 - **La IP del PC cambia** con la red: revisar con `ipconfig` y actualizar `MQTT_HOST` en `firmware/control_uno_r4/secrets.h` (en POCOX7Pro fue 10.157.200.37 los días 4 y 5 de noviembre).
 - **Hotspot del celular con aislamiento de clientes:** el Arduino entra al WiFi pero da `MQTT falló (estado -2)` y el PC no lo ve (ni ping ni ARP). Solución: apagar y encender la zona Wi-Fi del celular (el 2026-11-05 bastó con eso). Plan B: zona WiFi del propio PC (Configuración → Red e Internet → Zona con cobertura inalámbrica móvil, banda 2,4 GHz; PC = 192.168.137.1). El Monitor Serie muestra la IP del Arduino y del broker en cada intento fallido.
 - **Cámara virtual de NVIDIA Broadcast:** aparece como otra cámara (hoy la 1) y altera los colores. Usar la real (hoy la 0).
-- **Color corrido por la cámara:** la webcam del PC ve una manzana verde con tono 22–31 (el perfil por defecto pone el verde desde 35). Se corrige en `vision/calibracion_manzana.json`, no en el código.
+- **Color corrido por la cámara:** la webcam del PC ve una manzana verde con tono 22–31 (el perfil por defecto pone el verde desde 35). Se corrige en `ia/vision/calibracion_manzana.json`, no en el código.
 - **Sombras confundidas con manchas:** con luz de arriba, la mitad inferior de la manzana se oscurece. Las manchas se detectan comparando cada zona con su alrededor (`manchas_locales`, parámetro `defecto_ratio`), así una sombra suave no cuenta como defecto.
 - **Cerrar la ventana de la visión (tecla q) apaga la visión:** las piezas siguen, pero van a la salida 3 por falta de resultado.
 
@@ -411,24 +421,26 @@ ollama pull <modelo-de-vision>
 ```
 
 ```bash
-# Todo desde proyecto-final/, con el entorno virtual (.venv\Scripts\activate). Una terminal por proceso.
-mosquitto -c server/mosquitto/mosquitto.conf -v     # broker
+# Una terminal por proceso, con el entorno virtual de esa carpeta (.venv\Scripts\activate).
+# --- Desde servidor/ (PC-servidor) ---
+mosquitto -c server/mosquitto/mosquitto.conf -v     # broker (o el servicio de Windows)
 python -m server.api.main                           # API + dashboard en http://localhost:8000
-python -m vision.clasificador                       # visión con ventana en vivo (motor según VISION_MOTOR: ia u opencv; q = salir)
-python -m herramientas.comparar_motores            # IA vs OpenCV en las fotos guardadas, con tiempos
-python -m vision.clasificador --simular             # visión sin cámara (manzanas dibujadas)
 python -m simulador.sim_control                     # banda simulada (o el Arduino real)
-mosquitto_sub -h localhost -t "sorter/#" -v         # ver todos los mensajes
 python -m herramientas.verificar_flujo --manzanas 10 --velocidad 40   # prueba de punta a punta
+mosquitto_sub -h localhost -t "sorter/#" -v         # ver todos los mensajes
+# --- Desde ia/ (PC-IA) ---
+python -m vision.clasificador                       # visión con ventana en vivo (motor según VISION_MOTOR: ia u opencv; q = salir)
+python -m vision.clasificador --simular             # visión sin cámara (manzanas dibujadas)
+python -m herramientas.comparar_motores            # IA vs OpenCV en las fotos guardadas, con tiempos
 python -m pytest tests                              # pruebas unitarias
 python -m vision.listar_camaras                     # ver qué índice tiene la webcam externa
 python -m vision.calibrar_hsv                       # calibrar la visión con la webcam
 ```
 
 ```powershell
-# PC-IA: dependencias de la IA (PyTorch con CUDA + transformers). PYTHONUTF8 evita un error de pip con tildes.
+# PC-IA, desde ia/: dependencias (PyTorch con CUDA + transformers). PYTHONUTF8 evita un error de pip con tildes.
 $env:PYTHONUTF8 = "1"; pip install -r requirements.txt -r requirements-ia.txt
-# PC-servidor: instalación completa (Mosquitto, XAMPP, firewall, BD, venv, .env)
+# PC-servidor, desde servidor/: instalación completa (Mosquitto, XAMPP, firewall, BD, venv, .env)
 powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1
 ```
 

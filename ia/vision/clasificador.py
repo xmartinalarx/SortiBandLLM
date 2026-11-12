@@ -4,14 +4,15 @@ Flujo: recibe `sorter/sensor/arrival` -> toma la foto -> la clasifica (IA de Hug
 Face o OpenCV, según VISION_MOTOR en .env) -> decide la salida (reglas.py) -> guarda
 la foto -> publica `sorter/vision/result`.
 
-Si el servidor corre en otro PC (SERVER_URL en .env), la configuración se lee por
-HTTP (/api/settings) y cada foto se sube al servidor (/api/imagenes).
+La configuración (colores del grupo A, umbral) se lee por HTTP del PC-servidor
+(SERVER_URL/api/settings) y cada foto se sube a él (/api/imagenes) para el dashboard.
+Este nodo no toca la base de datos.
 
 Además abre una ventana con la cámara en vivo: muestra el rectángulo de lo que
 detecta, su color, la confianza y las manchas. Cuando el Arduino pide una foto,
 la ventana muestra esa foto ~2,5 s con la salida asignada.
 
-Uso (desde la raíz del proyecto):
+Uso (desde la carpeta ia/):
     python -m vision.clasificador                 # webcam real + ventana en vivo
     python -m vision.clasificador --sin-ventana   # webcam real, sin ventana
     python -m vision.clasificador --simular       # sin cámara: dibuja manzanas falsas
@@ -29,16 +30,23 @@ import numpy as np
 import paho.mqtt.client as mqtt
 import requests
 
-from comun import config, db, topicos
+from comun import config, topicos
 from vision.analisis import cargar_calibracion, imagen_sintetica
 from vision.modelo_ia import crear_motor
 from vision.dibujo import dibujar_aviso_foto, dibujar_deteccion
 from vision.reglas import decidir_salida
 
-CACHE_SETTINGS_S = 5      # cada cuánto se vuelve a leer la configuración de la BD
+CACHE_SETTINGS_S = 5      # cada cuánto se vuelve a pedir la configuración al servidor
 MOSTRAR_FOTO_S = 2.5      # cuánto tiempo queda en pantalla la foto de cada manzana
 REFRESCO_VIVO_S = 0.1     # cada cuánto se analiza la cámara en vivo (la IA tarda ~20-50 ms en GPU)
-VENTANA = "ClasifIoT - vision (q = salir)"
+VENTANA = "SortiBandLLM - vision (q = salir)"
+
+# Configuración usada mientras el servidor no responde (degradación segura)
+SETTINGS_POR_DEFECTO = {
+    "grupo_a_colores": "rojo",
+    "umbral_confianza": "0.6",
+    "velocidad_mm_s": "30",
+}
 
 
 class NodoVision:
@@ -46,7 +54,7 @@ class NodoVision:
         self.simular = simular
         self.ventana = ventana
         self.calib = cargar_calibracion()
-        self.settings = dict(db.SETTINGS_POR_DEFECTO)   # se actualiza en refrescar_settings()
+        self.settings = dict(SETTINGS_POR_DEFECTO)   # se actualiza en refrescar_settings()
         self.camara = None
         self.cuadro = None                # última imagen leída de la cámara
         self.lock = threading.Lock()      # MQTT y la ventana corren en hilos distintos
@@ -70,28 +78,26 @@ class NodoVision:
         self.cliente.on_message = self.al_recibir
 
     def leer_settings(self) -> dict:
-        """Del servidor por HTTP si está en otro PC; si no, directo de MySQL."""
-        if config.SERVER_URL:
-            r = requests.get(f"{config.SERVER_URL}/api/settings", timeout=3)
-            r.raise_for_status()
-            return r.json()["settings"]
-        return db.leer_settings()
+        """Pide la configuración al PC-servidor por HTTP."""
+        r = requests.get(f"{config.SERVER_URL}/api/settings", timeout=3)
+        r.raise_for_status()
+        return r.json()["settings"]
 
     def refrescar_settings(self):
         """Hilo aparte: relee la configuración cada pocos segundos.
 
-        Va separado del camino crítico: si el servidor o MySQL están lentos o caídos,
+        Va separado del camino crítico: si el servidor está lento o caído,
         la clasificación no espera; sigue con la última configuración conocida.
         """
         bd_ok = None
-        origen = config.SERVER_URL or "la BD"
+        origen = config.SERVER_URL
         while True:
             try:
                 self.settings = self.leer_settings()
                 if bd_ok is not True:
                     print(f"[CONFIG] Configuración leída de {origen}")
                 bd_ok = True
-            except Exception as error:  # noqa: BLE001 - una falla de BD no debe detener la visión
+            except Exception as error:  # noqa: BLE001 - una falla del servidor no debe detener la visión
                 if bd_ok is not False:   # se avisa una sola vez, no cada 5 s
                     print(f"[AVISO] No se pudo leer la configuración de {origen} ({error}); "
                           "uso la última conocida")
@@ -131,8 +137,8 @@ class NodoVision:
             nombre = f"{datetime.now():%Y%m%d_%H%M%S}_{piece_id}.jpg"
             cv2.imwrite(str(config.IMAGES_DIR / nombre), imagen)   # se guarda sin dibujos (sirve de dataset)
             image_path = f"imagenes/{nombre}"   # ruta que sirve el servidor web
-            if config.SERVER_URL:   # servidor en otro PC: se le sube la foto sin atrasar el resultado
-                threading.Thread(target=self.subir_foto, args=(nombre,), daemon=True).start()
+            # se sube la foto al servidor en otro hilo, sin atrasar el resultado
+            threading.Thread(target=self.subir_foto, args=(nombre,), daemon=True).start()
 
         salida = decidir_salida(resultado["color"], resultado["is_defective"],
                                 resultado["confidence"], self.settings)
@@ -222,7 +228,7 @@ class NodoVision:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Nodo de visión de ClasifIoT")
+    parser = argparse.ArgumentParser(description="Nodo de visión de SortiBandLLM")
     parser.add_argument("--simular", action="store_true", help="sin cámara: usa imágenes sintéticas")
     parser.add_argument("--sin-ventana", action="store_true", help="no abrir la ventana en vivo")
     args = parser.parse_args()

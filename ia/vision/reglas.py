@@ -7,8 +7,7 @@ Salida 3 (final de la banda):   el resto
 Es una función pura (no usa cámara, MQTT ni BD) para poder probarla con pytest.
 """
 
-# Todos los colores que puede entregar algún perfil (manzana o lata). Ver vision/analisis.py
-COLORES = ("rojo", "naranjo", "amarillo", "verde", "azul")
+from comun.topicos import COLORES  # noqa: F401 - todos los colores que puede entregar algún perfil
 
 
 def colores_grupo_a(settings: dict) -> set[str]:

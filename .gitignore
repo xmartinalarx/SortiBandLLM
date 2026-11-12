@@ -2,9 +2,9 @@
 .env
 firmware/**/secrets.h
 
-# Datos generados (fotos de manzanas)
-data/imagenes/*
-!data/imagenes/.gitkeep
+# Datos generados (fotos de manzanas), en servidor/ y en ia/
+*/data/imagenes/*
+!*/data/imagenes/.gitkeep
 
 # Python
 __pycache__/

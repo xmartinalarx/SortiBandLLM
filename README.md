@@ -11,45 +11,41 @@ en [CLAUDE.md](CLAUDE.md).
 > La base de datos y su usuario se siguen llamando `clasifiot` (nombre anterior del proyecto).
 
 ```
-Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- Visión (webcam + CLIP / OpenCV)
-                            |
-                     Servidor FastAPI --> MySQL
-                            |
-                       Dashboard web
+Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- PC-IA: webcam + CLIP / OpenCV
+                                |                    |
+                        API FastAPI <------HTTP------+  (configuración y fotos)
+                         |        |
+                       MySQL   Dashboard web
+                   \______ PC-servidor ______/
 ```
 
-## 1. Instalación (una vez)
+## Dos carpetas, una por equipo
 
-1. **Python 3.12** y el entorno virtual:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-2. **Mosquitto**: instalar desde https://mosquitto.org/download/ y abrir el puerto 1883 en el
-   firewall de Windows (para que entre el Arduino).
-3. **MySQL 8**: crear la base con el esquema y un usuario para la aplicación:
-   ```bash
-   mysql -u root -p < server/db/schema.sql
-   mysql -u root -p -e "CREATE USER 'clasifiot'@'localhost' IDENTIFIED BY 'una_clave'; GRANT ALL ON clasifiot.* TO 'clasifiot'@'localhost';"
-   ```
-4. Copiar `.env.example` como `.env` y completar la clave de la BD.
+| Carpeta | Se copia al | Contiene | Guía |
+|---|---|---|---|
+| [`servidor/`](servidor/) | PC-servidor | Broker, BD, API, dashboard, simulador | [servidor/LEEME.md](servidor/LEEME.md) |
+| [`ia/`](ia/) | PC-IA (con GPU) | Cámara, IA, OpenCV, pruebas | [ia/LEEME.md](ia/LEEME.md) |
+| `firmware/` | Arduino | Control de la banda | [docs/conexion-paso-a-paso.md](docs/conexion-paso-a-paso.md) |
+| `hardware/3d/` | Impresora 3D | Piezas, STL y G-code | [hardware/3d/manzanas/LEEME.md](hardware/3d/manzanas/LEEME.md) |
+| `docs/` | — | Guías de conexión e informes | — |
 
-## 2. Correr todo SIN hardware (simulación)
+Cada carpeta tiene su propio `.env`, `requirements.txt` y entorno de Python, y se levanta sola.
+Todo se puede correr también en un solo PC, cada parte en su terminal (`MQTT_HOST=localhost` y
+`SERVER_URL=http://localhost:8000` en `ia/.env`).
 
-Una terminal por proceso, todas desde la carpeta `proyecto-final/` y con el entorno activado:
+## Correr todo SIN hardware (simulación)
 
-| Terminal | Comando | Qué es |
-|---|---|---|
-| 1 | `mosquitto -c server/mosquitto/mosquitto.conf -v` | Broker MQTT |
-| 2 | `python -m server.api.main` | API + dashboard en http://localhost:8000 |
-| 3 | `python -m vision.clasificador --simular` | Visión con manzanas dibujadas |
-| 4 | `python -m simulador.sim_control` | Banda simulada (reemplaza al Arduino) |
-| 5 | `mosquitto_sub -h localhost -t "sorter/#" -v` | Ver todos los mensajes |
+| Terminal | Carpeta | Comando | Qué es |
+|---|---|---|---|
+| 1 | `servidor/` | `mosquitto -c server/mosquitto/mosquitto.conf -v` | Broker MQTT (o el servicio de Windows) |
+| 2 | `servidor/` | `python -m server.api.main` | API + dashboard en http://localhost:8000 |
+| 3 | `ia/` | `python -m vision.clasificador --simular` | Visión con manzanas dibujadas |
+| 4 | `servidor/` | `python -m simulador.sim_control` | Banda simulada (reemplaza al Arduino) |
+| 5 | cualquiera | `mosquitto_sub -h localhost -t "sorter/#" -v` | Ver todos los mensajes |
 
 Abrir el dashboard y apretar **Iniciar**.
 
-## 3. ¿Llegan los datos? Cómo comprobarlo
+## ¿Llegan los datos? Cómo comprobarlo
 
 **A mano:** en la terminal 5, por cada manzana deben aparecer en orden, con el mismo `piece_id`:
 ```
@@ -58,7 +54,7 @@ sorter/vision/result     {"piece_id": 7, "color": "rojo", "output_channel": 2, .
 sorter/control/diverted  {"piece_id": 7, "output_channel": 2, ...}
 ```
 
-**Automático:** revisa los mensajes Y la base de datos, y dice OK o qué falló:
+**Automático** (desde `servidor/`): revisa los mensajes Y la base de datos, y dice OK o qué falló:
 ```bash
 python -m herramientas.verificar_flujo --manzanas 10 --velocidad 40
 python -m herramientas.verificar_flujo --manzanas 10 --sin-bd      # solo MQTT
@@ -78,24 +74,23 @@ FROM clasifiot.pieces ORDER BY id DESC LIMIT 10;
 | Cerrar Mosquitto | La banda se detiene |
 | Cerrar la visión | Las manzanas van a la salida 3 y igual quedan registradas |
 | Apagar MySQL | La clasificación sigue; el dashboard muestra *BD: sin conexión* |
+| Apagar la API | La visión sigue con la última configuración; las fotos no llegan al dashboard |
 | Botón de emergencia del dashboard | Aparece `sorter/emergency` y la banda se detiene |
 
-**Pruebas unitarias:** `python -m pytest tests`
+**Pruebas unitarias** (desde `ia/`): `python -m pytest tests`
 
-## 4. Pasar al hardware real (de a una pieza)
+## Pasar al hardware real
 
 Guía completa de cableado y encendido, con una prueba por paso: [docs/conexion-paso-a-paso.md](docs/conexion-paso-a-paso.md).
 
 1. **Arduino UNO R4 WiFi**: copiar `firmware/control_uno_r4/secrets.h.example` como `secrets.h` y
-   completarlo (la IP del PC sale de `ipconfig`). Instalar el paquete de placas "Arduino UNO R4
-   Boards" y las librerías PubSubClient y ArduinoJson. Para probarlo sin la banda, activar `MODO_BANCO` en `config.h`:
-   cada `m` en el Monitor Serie simula una manzana. Cerrar el simulador (terminal 4) y repetir
-   la sección 3: los mensajes deben ser los mismos.
-2. **Webcam externa**: conectarla al PC y ver qué índice tiene con `python -m vision.listar_camaras`
-   (con `--ver 1` se ve la imagen de la cámara 1). Poner ese número en `CAMERA_INDEX` del `.env`.
-   Luego calibrar con manzanas reales y la luz del túnel (`python -m vision.calibrar_hsv`,
-   tecla `s` para guardar) y correr la visión sin `--simular`.
-3. **Pines** (`config.h`): están marcados POR CONFIRMAR; revisarlos antes de cablear.
+   completarlo con la IP del PC-servidor. Instalar el paquete de placas "Arduino UNO R4 Boards" y las
+   librerías PubSubClient, ArduinoJson y Servo. Para probarlo sin la banda, activar `MODO_BANCO` en
+   `config.h`: cada `m` en el Monitor Serie simula una manzana.
+2. **Webcam externa** (en el PC-IA): ver su índice con `python -m vision.listar_camaras` y ponerlo en
+   `CAMERA_INDEX` de `ia/.env`. Calibrar con manzanas reales y la luz del túnel
+   (`python -m vision.calibrar_hsv`, tecla `s` para guardar).
+3. **Pines** (`config.h`): revisarlos antes de cablear.
 
 > Si el Arduino no llega al PC en la red del laboratorio (puede haber aislamiento entre
 > clientes), probar con el hotspot de un celular.

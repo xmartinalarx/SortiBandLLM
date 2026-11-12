@@ -1,8 +1,8 @@
-# ClasifIoT - instala y configura el PC-SERVIDOR (Windows).
+# SortiBandLLM - instala y configura el PC-SERVIDOR (Windows).
 # Deja listos: Mosquitto (broker MQTT), MySQL de XAMPP, el entorno de Python y el .env.
 #
-# Uso: copiar la carpeta proyecto-final a este PC (sin .venv ni data\imagenes) y, desde
-# PowerShell en esa carpeta:
+# Uso: copiar la carpeta servidor\ a este PC (sin .venv ni data\imagenes) y, desde
+# PowerShell dentro de esa carpeta:
 #     powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1
 # Pide permiso de administrador una vez (firewall y Mosquitto).
 # (Sin tildes a proposito: PowerShell 5 las muestra mal en scripts.)
@@ -84,7 +84,7 @@ $env:PYTHONUTF8 = "1"
 $envArchivo = "$raiz\.env"
 if (-not (Test-Path $envArchivo)) { Copy-Item "$raiz\.env.example" $envArchivo }
 $lineas = Get-Content $envArchivo
-$valores = @{ "MQTT_HOST" = "localhost"; "DB_HOST" = "localhost"; "DB_USER" = "clasifiot"; "DB_PASSWORD" = $clave; "DB_NAME" = "clasifiot"; "VISION_MOTOR" = "opencv"; "SERVER_URL" = "" }
+$valores = @{ "MQTT_HOST" = "localhost"; "DB_HOST" = "localhost"; "DB_USER" = "clasifiot"; "DB_PASSWORD" = $clave; "DB_NAME" = "clasifiot" }
 foreach ($k in $valores.Keys) {
     if ($lineas -match "^$k=") { $lineas = $lineas -replace "^$k=.*", "$k=$($valores[$k])" } else { $lineas += "$k=$($valores[$k])" }
 }

@@ -126,36 +126,36 @@ Es un pulsador común de 4 patas (push button). Va entre **D7** y **GND**:
 
 | Equipo | Corre | Configuración |
 |---|---|---|
-| **PC-servidor** (Windows) | Mosquitto, MySQL (XAMPP), servidor y dashboard | `powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1`: instala todo y muestra su IP |
-| **PC-IA** (con GPU NVIDIA y la webcam) | Visión con IA (CLIP) | `.env`: `VISION_MOTOR=ia`, `MQTT_HOST=<IP del servidor>`, `SERVER_URL=http://<IP del servidor>:8000` |
+| **PC-servidor** (Windows) | Carpeta `servidor/`: Mosquitto, MySQL (XAMPP), servidor y dashboard | Desde `servidor/`: `powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1`: instala todo y muestra su IP |
+| **PC-IA** (con GPU NVIDIA y la webcam) | Carpeta `ia/`: visión con IA (CLIP) | `ia/.env`: `VISION_MOTOR=ia`, `MQTT_HOST=<IP del servidor>`, `SERVER_URL=http://<IP del servidor>:8000` |
 | **Arduino** | Banda, paletas y sensores | `secrets.h`: `MQTT_HOST` = IP del PC-servidor |
 
 - Los tres en la misma red (hotspot POCOX7Pro, 2,4 GHz).
-- Copiar la carpeta `proyecto-final` al PC-servidor **sin** `.venv` ni `data\imagenes`.
+- Copiar la carpeta `servidor/` al PC-servidor y la carpeta `ia/` al PC-IA, **sin** `.venv` ni `data\imagenes`. Cada una trae su `LEEME.md` con los pasos.
 - Prueba: en el PC-IA, `python -m vision.clasificador` debe decir `Motor listo: IA clip-vit-base-patch32 (GPU)` y `Configuración leída de http://...`; la foto de cada manzana aparece en el dashboard del PC-servidor.
 
 ## Parte C — Preparar el PC (una vez)
 
-1. **Entorno de Python** (desde `proyecto-final/`):
+1. **Entorno de Python**, uno en cada carpeta (`servidor/` e `ia/`), desde esa carpeta:
    ```bash
    python -m venv .venv
    .venv\Scripts\activate
-   pip install -r requirements.txt
+   pip install -r requirements.txt          # en ia/: además -r requirements-ia.txt
    ```
 2. **Base de datos:** abrir el panel de XAMPP y apretar *Start* en **MySQL**.
-   La base `clasifiot` ya está creada (en otro PC: ver README, sección 1).
+   La base `clasifiot` ya está creada (en otro PC: `servidor/scripts/instalar_servidor.ps1` la crea).
 3. **Mosquitto:** instalar desde https://mosquitto.org/download/.
 4. **Firewall de Windows** (PowerShell como administrador), para que entren el Arduino y el celular:
    ```powershell
    netsh advfirewall firewall add rule name="Mosquitto 1883" dir=in action=allow protocol=TCP localport=1883
    netsh advfirewall firewall add rule name="ClasifIoT web 8000" dir=in action=allow protocol=TCP localport=8000
    ```
-5. **Webcam:** por ahora la integrada del PC. Revisar cuál es:
+5. **Webcam:** por ahora la integrada del PC. Revisar cuál es (desde `ia/`):
    ```bash
    python -m vision.listar_camaras          # lista las cámaras que responden
    python -m vision.listar_camaras --ver 0  # muestra la imagen (q = salir)
    ```
-   Poner el índice correcto en `CAMERA_INDEX` del `.env`. **No usar la cámara virtual de NVIDIA
+   Poner el índice correcto en `CAMERA_INDEX` de `ia/.env`. **No usar la cámara virtual de NVIDIA
    Broadcast** (aplica efectos al fondo y cambia los colores).
 6. **IP del PC:** `ipconfig` → "Dirección IPv4" del adaptador WiFi. Puede cambiar de un día a otro.
 
@@ -176,10 +176,10 @@ Es un pulsador común de 4 patas (push button). Va entre **D7** y **GND**:
 
 | # | Qué hacer | Cómo se comprueba |
 |---|---|---|
-| 1 | Terminal 1: `mosquitto -c server/mosquitto/mosquitto.conf -v` | Dice `Opening ipv4 listen socket on port 1883` |
+| 1 | Terminal 1, en `servidor/`: `mosquitto -c server/mosquitto/mosquitto.conf -v` | Dice `Opening ipv4 listen socket on port 1883` |
 | 2 | Terminal 2: `mosquitto_sub -h localhost -t "sorter/#" -v` | Queda esperando (aquí se ve todo lo que viaja) |
-| 3 | Terminal 3: `python -m server.api.main` | En http://localhost:8000: *MQTT: conectado* y *BD: conectada* |
-| 4 | Terminal 4: `python -m vision.clasificador` | Dice `Visión lista (webcam 0)` |
+| 3 | Terminal 3, en `servidor/`: `python -m server.api.main` | En http://localhost:8000: *MQTT: conectado* y *BD: conectada* |
+| 4 | Terminal 4, en `ia/`: `python -m vision.clasificador` | Dice `Visión lista (webcam 0)` |
 | 5 | Arduino: activar `#define MODO_BANCO`, conectar **solo** el USB (cargador desenchufado) y subir el programa | Monitor Serie (115200): `WiFi conectado`, `MQTT conectado` |
 | 6 | Mirar el dashboard | *banda: detenida* (el Arduino está en línea) |
 | 7 | **Iniciar** en el dashboard; luego `m` en el Monitor Serie | En la terminal 2: `arrival` → `result` → `diverted` con el mismo `piece_id`. Los LEDs A–D de la ULN2003 parpadean |
@@ -188,7 +188,7 @@ Es un pulsador común de 4 patas (push button). Va entre **D7** y **GND**:
 | 10 | Apretar el **botón de emergencia** | La banda se detiene, el dashboard muestra *EMERGENCIA* y en la terminal 2 aparece `sorter/emergency` |
 | 11 | Quitar `MODO_BANCO`, conectar el sensor IR y montar la banda | Pasar la mano por el sensor: el Monitor Serie dice `Manzana en el sensor IR` |
 | 12 | Banda montada: **Iniciar** sin manzanas y después con manzanas | La banda avanza sin trabarse. Si el motor zumba y no avanza, bajar a 20 mm/s |
-| 13 | Prueba completa | `python -m herramientas.verificar_flujo --manzanas 10` termina en `RESULTADO: OK` |
+| 13 | Prueba completa | En `servidor/`: `python -m herramientas.verificar_flujo --manzanas 10` termina en `RESULTADO: OK` |
 
 **Desde el celular:** conectado a la misma red, abrir `http://<IP-del-PC>:8000`.
 
@@ -200,10 +200,10 @@ Es un pulsador común de 4 patas (push button). Va entre **D7** y **GND**:
 |---|---|
 | El Arduino no pasa de `Conectando a ...` | Red de 5 GHz, clave mal escrita o red con usuario personal |
 | `MQTT falló (estado -2)` | IP del PC mal escrita en `secrets.h`, Mosquitto apagado o firewall bloqueando el 1883 |
-| El dashboard dice *BD: sin conexión* | MySQL apagado en XAMPP, o clave del `.env` incorrecta |
+| El dashboard dice *BD: sin conexión* | MySQL apagado en XAMPP, o clave de `servidor/.env` incorrecta |
 | Los LEDs A–D no parpadean | IN1–IN4 mal conectados o banda detenida (apretar Iniciar) |
 | Los LEDs parpadean pero el motor no gira | Falta energía en la placa (cargador, puente ON/OFF) o el conector del motor está suelto |
 | El motor zumba y no avanza | La banda pesa demasiado o la velocidad es muy alta: bajar a 20 mm/s |
 | Los servos tiemblan o el Arduino se reinicia | Servos alimentados desde el Arduino, rieles rojos unidos o falta el puente de GND |
 | Todas las manzanas van a la salida 3 | La visión no está corriendo o la confianza queda bajo el umbral |
-| Los colores salen raros | Cámara equivocada (virtual de NVIDIA) o luz que cambia: calibrar con `python -m vision.calibrar_hsv` |
+| Los colores salen raros | Cámara equivocada (virtual de NVIDIA) o luz que cambia: calibrar con `python -m vision.calibrar_hsv` (en `ia/`) |

@@ -1,4 +1,4 @@
-"""Servidor web de ClasifIoT: API REST + dashboard + puente MQTT.
+"""Servidor web de SortiBandLLM: API REST + dashboard + puente MQTT.
 
 Uso (desde la raíz del proyecto):
     python -m server.api.main
@@ -19,7 +19,7 @@ from comun import config
 from comun.db import guardar_setting, leer_settings
 from server.api import db
 from server.api.mqtt_bridge import PuenteMQTT
-from vision.reglas import COLORES
+from comun.topicos import COLORES
 
 puente = PuenteMQTT()
 VEL_MIN, VEL_MAX = 10, 40    # mm/s, igual que en el firmware (28BYJ-48)
@@ -32,7 +32,7 @@ async def ciclo_de_vida(app: FastAPI):
     puente.detener()
 
 
-app = FastAPI(title="ClasifIoT", lifespan=ciclo_de_vida)
+app = FastAPI(title="SortiBandLLM", lifespan=ciclo_de_vida)
 
 
 @app.exception_handler(pymysql.err.OperationalError)

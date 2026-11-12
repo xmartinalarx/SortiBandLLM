@@ -1,4 +1,4 @@
-// Dashboard de ClasifIoT: consulta la API cada 1,5 s y envía los comandos.
+// Dashboard de SortiBandLLM: consulta la API cada 1,5 s y envía los comandos.
 // Sin frameworks ni websockets, para que sea fácil de leer y explicar.
 
 const REFRESCO_MS = 1500;

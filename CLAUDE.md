@@ -237,7 +237,6 @@ proyecto-final/
 │   └── conexiones-clasifiot.html # guía visual del protoboard (abrir en el navegador)
 ├── hardware/
 │   └── 3d/
-│       ├── historico_MyM_40mm/  # versión M&M de 40 mm (histórica, reemplazada)
 │       └── manzanas/            # versión vigente
 │           ├── LEEME.md
 │           ├── banda_manzanas.scad

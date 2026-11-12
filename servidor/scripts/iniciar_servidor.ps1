@@ -23,8 +23,9 @@ function PuertoAbierto([int]$puerto) {
     $cliente = New-Object System.Net.Sockets.TcpClient
     try {
         $intento = $cliente.BeginConnect("127.0.0.1", $puerto, $null, $null)
-        $ok = $intento.AsyncWaitHandle.WaitOne(500) -and $cliente.Connected
-        return $ok
+        if (-not $intento.AsyncWaitHandle.WaitOne(500)) { return $false }
+        $cliente.EndConnect($intento)   # lanza error si la conexion fallo (evita falsos OK)
+        return $true
     } catch { return $false } finally { $cliente.Close() }
 }
 

@@ -321,6 +321,7 @@ Registrar una matriz de confusión (color real vs. clasificado; buena vs. defect
 | Clasificación OpenCV → IA de Hugging Face (CLIP) con OpenCV de respaldo | El grupo quiere que una IA mire la cámara y decida; CLIP funciona sin entrenar |
 | Un PC → dos (PC-IA con GPU y webcam; PC-servidor con lo demás) | La IA usa la GPU sin competir con la BD y el servidor; suma un nodo a la red IoT |
 | Red de la U → hotspot del celular POCOX7Pro | La red de la U es de 5 GHz y abierta; el R4 solo usa 2,4 GHz. Plan B probado: zona WiFi del PC |
+| Hotspot del celular → zona WiFi TARRO del PC-servidor (IP fija 192.168.137.1) | El celular daba otra IP en cada conexión y había que cambiar `secrets.h` y volver a cargar el firmware (2026-11-12) |
 | Impresora genérica tipo Ender-3 → Ender-3 V3 KE del laboratorio, G-code `_v2` | Es la máquina real; los G-code v1 daban el error key:2111 |
 | Agujero del eslabón 2,0 → 2,1 mm | Con 2,0 mm el pasador se traba en las 9 bisagras |
 | Repositorio `Reicas23/IOT-PROYECT` → `xmartinalarx/SortiBandLLM` | El oficial es SortiBandLLM (2026-11-12) |
@@ -358,7 +359,7 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 | Parte | Estado |
 |---|---|
 | Firmware `control_uno_r4` | Compila y está cargado en el Arduino. `MODO_BANCO` **activo** (cada `m` por serie = una pieza) |
-| Red | Hotspot del celular **POCOX7Pro** (2,4 GHz), red elegida por el grupo. La red de la U no sirve (5 GHz, abierta). Si el hotspot aísla a los equipos, reiniciarlo (ver Problemas conocidos) |
+| Red | **TARRO**: zona WiFi (2,4 GHz) que crea el **PC-servidor**, desde el 2026-11-12. En ella el PC-servidor tiene siempre la IP **192.168.137.1**, así que `secrets.h` del Arduino e `ia/.env` no cambian más (la contraseña está solo en `secrets.h`, fuera de git). Antes: hotspot del celular POCOX7Pro, que daba IP distintas en cada conexión |
 | Broker | Mosquitto instalado como servicio de Windows, con `listener 1883 0.0.0.0` en su `mosquitto.conf` |
 | BD | MariaDB de XAMPP (compatible con MySQL 8), base `clasifiot` |
 | Visión | Webcam integrada del PC (`CAMERA_INDEX=0`), ventana en vivo con rectángulo; perfil `PRODUCTO=manzana` con `ia/vision/calibracion_manzana.json` (verde desde tono 23) |
@@ -381,7 +382,8 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 - **El Arduino IDE retiene el puerto COM** aunque se cierre el Monitor Serie: para usar el puerto desde otro programa hay que cerrar el IDE completo.
 - **`struct Pieza` va antes de cualquier función** en el `.ino`: el IDE genera prototipos automáticos al inicio y fallan si el tipo se define después.
 - **Mosquitto 2 solo acepta conexiones locales** si no se declara `listener 1883 0.0.0.0`. Abrir el puerto 1883 (y 8000 para el dashboard) en el firewall.
-- **La IP del PC cambia** con la red: revisar con `ipconfig` y actualizar `MQTT_HOST` en `firmware/control_uno_r4/secrets.h` (en POCOX7Pro fue 10.157.200.37 los días 4 y 5 de noviembre).
+- **La IP del PC cambia** con la red: por eso se usa la zona WiFi TARRO del PC-servidor (siempre 192.168.137.1). En otra red: revisar con `ipconfig` y actualizar `MQTT_HOST` en `firmware/control_uno_r4/secrets.h` e `ia/.env`.
+- **El PC-IA está en TARRO pero no llega al servidor (timeout, ni ping):** en el PC-servidor, revisar que `INICIAR_SERVIDOR.bat` esté corriendo y que el firewall permita 1883 y 8000 en todas las redes (el instalador crea esas reglas; si no se instaló en ese PC, correrlo).
 - **Hotspot del celular con aislamiento de clientes:** el Arduino entra al WiFi pero da `MQTT falló (estado -2)` y el PC no lo ve (ni ping ni ARP). Solución: apagar y encender la zona Wi-Fi del celular (el 2026-11-05 bastó con eso). Plan B: zona WiFi del propio PC (Configuración → Red e Internet → Zona con cobertura inalámbrica móvil, banda 2,4 GHz; PC = 192.168.137.1). El Monitor Serie muestra la IP del Arduino y del broker en cada intento fallido.
 - **Cámara virtual de NVIDIA Broadcast:** aparece como otra cámara (hoy la 1) y altera los colores. Usar la real (hoy la 0).
 - **Color corrido por la cámara:** la webcam del PC ve una manzana verde con tono 22–31 (el perfil por defecto pone el verde desde 35). Se corrige en `ia/vision/calibracion_manzana.json`, no en el código.

@@ -1,11 +1,17 @@
-# ClasifIoT — clasificadora IoT de manzanas
+# SortiBandLLM — clasificadora IoT de manzanas
 
-Banda transportadora impresa en 3D que clasifica manzanas por color y defectos (OpenCV en el PC),
-las desvía con dos paletas (Arduino UNO R4 WiFi + servos) y registra cada una en MySQL. Un dashboard web
-muestra los datos y controla la banda. El contexto completo está en [CLAUDE.md](CLAUDE.md).
+Proyecto semestral del ramo Internet de las Cosas, del grupo **pythonGroup**: Martín Alarcón,
+Martín Araya, Vicente Pereira y Reinaldo Castillo.
+
+Banda transportadora impresa en 3D que clasifica manzanas por color y defectos (IA de Hugging Face,
+CLIP, con OpenCV de respaldo), las desvía con dos paletas (Arduino UNO R4 WiFi + servos) y registra
+cada una en MySQL. Un dashboard web muestra los datos y controla la banda. El contexto completo está
+en [CLAUDE.md](CLAUDE.md).
+
+> La base de datos y su usuario se siguen llamando `clasifiot` (nombre anterior del proyecto).
 
 ```
-Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- Visión (webcam + OpenCV)
+Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- Visión (webcam + CLIP / OpenCV)
                             |
                      Servidor FastAPI --> MySQL
                             |

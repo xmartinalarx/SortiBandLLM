@@ -146,8 +146,8 @@ Medido desde el eje del piñón tensor (x = 0), en el sentido de avance.
 
 | Pieza | Cantidad | Medidas / detalle |
 |---|---|---|
-| Eslabón | 112 (110 + 2 de repuesto) | 28 × 200 × 8 mm; paso 20 mm; placa de 2 mm; bisagras Ø 8 mm alternadas; agujero Ø 2,0 mm |
-| Pasador | 110 | Filamento Ø 1,75 × 202 mm |
+| Eslabón | 112 (110 + 2 de repuesto) | 28 × 200 × 8 mm; paso 20 mm; placa de 2 mm; bisagras Ø 8 mm alternadas; agujero Ø 2,1 mm |
+| Pasador | 110 | Filamento PLA+ Ø 1,75 × 202 mm |
 | Piñón | 6 (3 por eje, en y = 29, 100 y 171 mm) | Ø 64 × 14 mm; 10 dientes; radio primitivo 32,4 mm; eje 8 mm; prisionero M3 |
 | Tramo de cama de deslizamiento | 5 (de x = 50 a 950) | Escalera de 180 × 198 × 3 mm, rieles bajo las bisagras |
 | Paleta | 2 | 300 × 46 × 4 mm; se imprime en parte A (202 mm) y parte B (144 mm) unidas por traslape con 2 M3 |
@@ -188,20 +188,24 @@ Medido desde el eje del piñón tensor (x = 0), en el sentido de avance.
 
 ## Impresión: reparto entre los 4 integrantes
 
-Cada integrante imprime 28 eslabones (4 placas de 7) más un subsistema, con el mismo perfil y PETG blanco. Tiempos estimados con PrusaSlicer para una impresora tipo Ender-3.
+Cada integrante imprime 28 eslabones (4 placas de 7) más un subsistema, con el mismo perfil y PETG blanco. Se imprime en la **Creality Ender-3 V3 KE del laboratorio** (cama 220 × 220 mm, Klipper).
 
-| Integrante | Imprime | Tiempo | Filamento |
-|---|---|---|---|
-| Persona 1 | Eslabones + 2 paletas (A y B) + 1 cama | 40,6 h | ~556 g |
-| Persona 2 | Eslabones + 2 soportes de servo + 2 camas | 39,8 h | ~534 g |
-| Persona 3 | Eslabones + 3 piñones (eje tensor) + 1 cama | 38,2 h | ~493 g |
-| Persona 4 | Eslabones + 3 piñones (eje motriz) + 1 cama | 38,2 h | ~493 g |
-| **Total** | | **~157 h** | **~2,1 kg** + ~70 g de pasadores |
+| Integrante | Imprime | Tiempo en la KE |
+|---|---|---|
+| Persona 1 | Eslabones + 2 paletas (A y B) + 1 cama | ~30 h |
+| Persona 2 | Eslabones + 2 soportes de servo + 2 camas | ~29 h |
+| Persona 3 | Eslabones + 3 piñones (eje tensor) + 1 cama | ~28 h |
+| Persona 4 | Eslabones + 3 piñones (eje motriz) + 1 cama | ~28 h |
+| **Total** | | **~115 h**, ~2,1 kg de PETG + ~70 g de pasadores |
 
-- **Ritmo:** con 2 impresiones al día, cada uno termina en 3 días (1 de margen).
-- **Perfil:** PETG 240/80 °C, capa 0,28 mm, 3 perímetros, relleno 25 % gyroid, sin soportes. Con capa de 0,2 mm el total sube a ~243 h.
-- **Prueba de tolerancia:** cada integrante imprime la suya (agujeros de 1,9 / 2,0 / 2,1 mm) antes de los eslabones y usa la variante que corresponda.
+- **Avance (2026-11-12):** prueba de tolerancia hecha y **4 placas de eslabones impresas** (28 de 112).
+- **La KE solo lee `.gcode`**, desde un USB FAT32 con nombres sin espacios ni tildes. Usar solo los de `hardware/3d/manzanas/gcode_Ender3V3KE_0.4_v2/` (terminan en `_v2`); guía en su `PASO_A_PASO.md`.
+- **Error key:2111:** lo daban los G-code v1, que extruían antes de que la boquilla volviera a 240 °C después de nivelar. Los v2 calientan (`M190`/`M109`) después de `START_PRINT`.
+- **Perfil (PrusaSlicer):** PETG blanco 240/70 °C, capa 0,2 mm, 3 perímetros, relleno 25 % gyroid, sin soportes; brim de 6 mm solo en las paletas.
+- **Agujero de los eslabones: 2,1 mm** (`01_eslabones_agujero_d21_v2.gcode`). Con 2,0 mm el pasador se traba al pasar por las 9 bisagras; esos eslabones sirven si se repasan con una broca de 2 mm, y se pueden mezclar.
+- **Pasadores:** filamento PLA+ de 1,75 mm, enderezado, punta en diagonal, metido girando y cortado a ras.
 - **Armado de la banda:** cada uno arma su tramo de 28 eslabones (bisagras hacia abajo); al final se unen los 4 tramos.
+- Si se acaba el filamento, el sensor pausa la impresión: cargar uno nuevo y reanudar.
 
 ## Hardware y seguridad
 
@@ -233,11 +237,14 @@ proyecto-final/
 │   └── conexiones-clasifiot.html # guía visual del protoboard (abrir en el navegador)
 ├── hardware/
 │   └── 3d/
-│       ├── banda/               # versión M&M de 40 mm (histórica, reemplazada)
+│       ├── historico_MyM_40mm/  # versión M&M de 40 mm (histórica, reemplazada)
 │       └── manzanas/            # versión vigente
 │           ├── LEEME.md
 │           ├── banda_manzanas.scad
+│           ├── gcode_Ender3V3KE_0.4_v2/ # G-code listos para la KE + PASO_A_PASO.md + perfil
+│           ├── stl/             # piezas/ (sueltas) y placas/ (cama de 220 × 220)
 │           ├── blender/         # escena .blend/.glb, renders y script
+│           ├── imagenes/        # renders para el informe
 │           └── impresion/       # REPARTO.md y persona_1 … persona_4
 ├── firmware/
 │   └── control_uno_r4/          # Arduino UNO R4 WiFi
@@ -306,6 +313,9 @@ Registrar una matriz de confusión (color real vs. clasificado; buena vs. defect
 | Clasificación OpenCV → IA de Hugging Face (CLIP) con OpenCV de respaldo | El grupo quiere que una IA mire la cámara y decida; CLIP funciona sin entrenar |
 | Un PC → dos (PC-IA con GPU y webcam; PC-servidor con lo demás) | La IA usa la GPU sin competir con la BD y el servidor; suma un nodo a la red IoT |
 | Red de la U → hotspot del celular POCOX7Pro | La red de la U es de 5 GHz y abierta; el R4 solo usa 2,4 GHz. Plan B probado: zona WiFi del PC |
+| Impresora genérica tipo Ender-3 → Ender-3 V3 KE del laboratorio, G-code `_v2` | Es la máquina real; los G-code v1 daban el error key:2111 |
+| Agujero del eslabón 2,0 → 2,1 mm | Con 2,0 mm el pasador se traba en las 9 bisagras |
+| Repositorio `Reicas23/IOT-PROYECT` → `xmartinalarx/SortiBandLLM` | El oficial es SortiBandLLM (2026-11-12) |
 
 ## Decisiones
 

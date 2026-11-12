@@ -14,7 +14,8 @@ Esta carpeta es todo lo que corre en el **PC-servidor**: el broker MQTT (Mosquit
 | `comun/` | Configuración (`.env`), tópicos MQTT y conexión a MySQL |
 | `simulador/` | Arduino falso, para probar sin hardware |
 | `herramientas/verificar_flujo.py` | Prueba de punta a punta (MQTT + BD) |
-| `scripts/instalar_servidor.ps1` | Deja todo instalado en Windows |
+| `INICIAR_SERVIDOR.bat` / `DETENER_SERVIDOR.bat` | Levantar o apagar todo con doble clic |
+| `scripts/` | `instalar_servidor.ps1` (instalación) y los scripts que usan los `.bat` |
 | `data/imagenes/` | Fotos que sube el PC-IA (no se suben a git) |
 
 ## Instalar (una vez)
@@ -27,9 +28,13 @@ powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1
 
 Instala Mosquitto y XAMPP si faltan, abre los puertos 1883 y 8000 en el firewall, crea la base de datos, el entorno de Python y el `.env`. Al final muestra **la IP de este PC**, que va en el `.env` del PC-IA y en el `secrets.h` del Arduino.
 
-## Levantar
+## Levantar: doble clic en `INICIAR_SERVIDOR.bat`
 
-Con Mosquitto y MySQL (XAMPP) encendidos, desde esta carpeta:
+Hace todo solo: instala si es la primera vez, levanta Mosquitto y MySQL si no están corriendo, inicia la API en su propia ventana, abre el dashboard en el navegador y muestra la IP que va en el PC-IA y en el Arduino.
+
+Para apagar: doble clic en **`DETENER_SERVIDOR.bat`** (apaga MySQL de forma ordenada). No cerrar MySQL a la fuerza: daña sus tablas internas.
+
+A mano, con Mosquitto y MySQL encendidos:
 
 ```powershell
 .venv\Scripts\activate

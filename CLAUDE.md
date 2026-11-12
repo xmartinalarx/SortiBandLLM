@@ -386,6 +386,7 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 - **Cámara virtual de NVIDIA Broadcast:** aparece como otra cámara (hoy la 1) y altera los colores. Usar la real (hoy la 0).
 - **Color corrido por la cámara:** la webcam del PC ve una manzana verde con tono 22–31 (el perfil por defecto pone el verde desde 35). Se corrige en `ia/vision/calibracion_manzana.json`, no en el código.
 - **Sombras confundidas con manchas:** con luz de arriba, la mitad inferior de la manzana se oscurece. Las manchas se detectan comparando cada zona con su alrededor (`manchas_locales`, parámetro `defecto_ratio`), así una sombra suave no cuenta como defecto.
+- **No matar `mysqld` a la fuerza** (`Stop-Process -Force`, `taskkill /F`): daña la tabla de permisos `mysql.db` (Aria, error "Read page with wrong checksum") y el usuario `clasifiot` pierde el acceso (error 1044). Apagar con `DETENER_SERVIDOR.bat` o `mysqladmin -u root shutdown`. Si pasa: con MySQL apagado, `aria_chk --safe-recover` y luego `--zerofill` sobre `C:\xampp\mysql\data\mysql\db`, arrancar y volver a dar `GRANT ALL ON clasifiot.* TO 'clasifiot'@'localhost'` (y los de `pma` y `bodegama_rtina`). Ocurrió el 2026-11-12.
 - **Cerrar la ventana de la visión (tecla q) apaga la visión:** las piezas siguen, pero van a la salida 3 por falta de resultado.
 
 ## Pendiente de diseño
@@ -440,7 +441,8 @@ python -m vision.calibrar_hsv                       # calibrar la visión con la
 ```powershell
 # PC-IA, desde ia/: dependencias (PyTorch con CUDA + transformers). PYTHONUTF8 evita un error de pip con tildes.
 $env:PYTHONUTF8 = "1"; pip install -r requirements.txt -r requirements-ia.txt
-# PC-servidor, desde servidor/: instalación completa (Mosquitto, XAMPP, firewall, BD, venv, .env)
+# PC-servidor: doble clic en servidor/INICIAR_SERVIDOR.bat (instala si falta, levanta Mosquitto, MySQL y la API, abre el dashboard)
+#   y servidor/DETENER_SERVIDOR.bat para apagar (MySQL de forma ordenada). Instalación sola, desde servidor/:
 powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1
 ```
 

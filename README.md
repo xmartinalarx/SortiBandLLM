@@ -30,6 +30,7 @@ Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- PC-IA: webcam + CLIP / OpenCV
 | `docs/` | — | Guías de conexión e informes | — |
 
 Cada carpeta tiene su propio `.env`, `requirements.txt` y entorno de Python, y se levanta sola.
+**El PC-servidor se levanta con doble clic en `servidor/INICIAR_SERVIDOR.bat`** (y se apaga con `DETENER_SERVIDOR.bat`).
 Todo se puede correr también en un solo PC, cada parte en su terminal (`MQTT_HOST=localhost` y
 `SERVER_URL=http://localhost:8000` en `ia/.env`).
 

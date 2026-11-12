@@ -198,7 +198,7 @@ Cada integrante imprime 28 eslabones (4 placas de 7) más un subsistema, con el 
 | Persona 4 | Eslabones + 3 piñones (eje motriz) + 1 cama | ~28 h |
 | **Total** | | **~115 h**, ~2,1 kg de PETG + ~70 g de pasadores |
 
-- **Avance (2026-11-12):** prueba de tolerancia hecha y **4 placas de eslabones impresas** (28 de 112).
+- **Avance (2026-11-12):** prueba de tolerancia hecha y **4 placas de eslabones impresas** (28 de 112). Faltan 12 placas de eslabones (~65 h) + paletas, 5 camas, soportes y 2 placas de piñones (~27,5 h): ~92 h en total, ~46 h por impresora con las **2 impresoras** disponibles (modelo de la segunda: por confirmar; los G-code `_v2` son solo para la KE).
 - **La KE solo lee `.gcode`**, desde un USB FAT32 con nombres sin espacios ni tildes. Usar solo los de `hardware/3d/manzanas/gcode_Ender3V3KE_0.4_v2/` (terminan en `_v2`); guía en su `PASO_A_PASO.md`.
 - **Error key:2111:** lo daban los G-code v1, que extruían antes de que la boquilla volviera a 240 °C después de nivelar. Los v2 calientan (`M190`/`M109`) después de `START_PRINT`.
 - **Perfil (PrusaSlicer):** PETG blanco 240/70 °C, capa 0,2 mm, 3 perímetros, relleno 25 % gyroid, sin soportes; brim de 6 mm solo en las paletas.

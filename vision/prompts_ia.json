@@ -1,0 +1,36 @@
+{
+  "_nota": "Frases que el modelo CLIP compara con la imagen (en inglés: CLIP entiende mejor). Se pueden ajustar sin tocar el código; reiniciar la visión para aplicar.",
+  "manzana": {
+    "color": {
+      "rojo": "a photo of a red apple",
+      "verde": "a photo of a green apple",
+      "amarillo": "a photo of a yellow apple"
+    },
+    "nada": [
+      "a photo of an empty white table with no fruit",
+      "a photo of a person",
+      "a photo of a hand"
+    ],
+    "estado": {
+      "sana": "a photo of a fresh, healthy apple with smooth skin",
+      "defectuosa": "a photo of a rotten, bruised apple with brown spots"
+    },
+    "umbral_defecto": 0.6
+  },
+  "lata": {
+    "color": {
+      "rojo": "a photo of a red soda can",
+      "naranjo": "a photo of an orange soda can",
+      "amarillo": "a photo of a yellow soda can",
+      "verde": "a photo of a green soda can",
+      "azul": "a photo of a blue soda can"
+    },
+    "nada": [
+      "a photo of an empty white table",
+      "a photo of a person",
+      "a photo of a hand"
+    ],
+    "estado": null,
+    "umbral_defecto": 0.6
+  }
+}

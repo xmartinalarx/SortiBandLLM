@@ -1,0 +1,19 @@
+# Secretos
+.env
+firmware/**/secrets.h
+
+# Datos generados (fotos de manzanas)
+data/imagenes/*
+!data/imagenes/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Binarios de terceros
+driver/
+
+# Archivos temporales de Word
+~$*

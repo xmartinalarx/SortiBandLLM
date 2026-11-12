@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClasifIoT</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <header>
+    <h1>ClasifIoT <span class="sub">clasificadora de manzanas</span></h1>
+    <div class="conexiones">
+      <span id="estado-banda" class="pastilla">banda: …</span>
+      <span id="estado-mqtt" class="pastilla">MQTT: …</span>
+      <span id="estado-bd" class="pastilla">BD: …</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Control de la banda -->
+    <section class="panel control">
+      <h2>Control</h2>
+      <div class="fila">
+        <button id="btn-iniciar" class="btn verde">Iniciar</button>
+        <button id="btn-detener" class="btn">Detener</button>
+      </div>
+      <label for="velocidad">Velocidad: <b id="velocidad-valor">30</b> mm/s
+        <span class="dim">(actual: <span id="velocidad-actual">–</span>)</span></label>
+      <div class="fila">
+        <input id="velocidad" type="range" min="10" max="40" step="5" value="30">
+        <button id="btn-velocidad" class="btn">Aplicar</button>
+      </div>
+      <button id="btn-emergencia" class="btn emergencia">PARADA DE EMERGENCIA</button>
+      <p id="mensaje" class="mensaje" role="status"></p>
+    </section>
+
+    <!-- Prueba de servos -->
+    <section class="panel" id="panel-servos">
+      <h2>Prueba de servos</h2>
+      <p class="dim">Solo con la banda detenida. Mira la paleta al apretar: el Arduino confirma cada movimiento.</p>
+      <p id="servos-aviso" class="mensaje" hidden>Detén la banda para probar los servos.</p>
+      <div class="servo" data-servo="1">
+        <h3>Paleta 1 · D9 <span class="dim">(defectuosas)</span></h3>
+        <div class="fila">
+          <button class="btn" type="button" data-accion="abrir">Abrir (0°)</button>
+          <button class="btn" type="button" data-accion="cerrar">Cerrar (45°)</button>
+          <button class="btn verde" type="button" data-accion="probar">Probar</button>
+        </div>
+        <div class="fila">
+          <input id="angulo-1" class="angulo" type="range" min="0" max="180" step="5" value="0" aria-label="Ángulo de la paleta 1">
+          <b class="angulo-valor">0°</b>
+          <button class="btn" type="button" data-accion="mover">Mover</button>
+        </div>
+        <p class="confirmacion dim">Sin pruebas todavía.</p>
+      </div>
+      <div class="servo" data-servo="2">
+        <h3>Paleta 2 · D10 <span class="dim">(grupo A)</span></h3>
+        <div class="fila">
+          <button class="btn" type="button" data-accion="abrir">Abrir (0°)</button>
+          <button class="btn" type="button" data-accion="cerrar">Cerrar (45°)</button>
+          <button class="btn verde" type="button" data-accion="probar">Probar</button>
+        </div>
+        <div class="fila">
+          <input id="angulo-2" class="angulo" type="range" min="0" max="180" step="5" value="0" aria-label="Ángulo de la paleta 2">
+          <b class="angulo-valor">0°</b>
+          <button class="btn" type="button" data-accion="mover">Mover</button>
+        </div>
+        <p class="confirmacion dim">Sin pruebas todavía.</p>
+      </div>
+    </section>
+
+    <!-- Indicadores -->
+    <section class="panel indicadores">
+      <h2>Lote <span id="lote" class="dim">–</span></h2>
+      <div class="tarjetas">
+        <div class="tarjeta"><span class="valor" id="total">0</span><span class="etiqueta">procesadas</span></div>
+        <div class="tarjeta"><span class="valor" id="pct-defectuosas">0 %</span><span class="etiqueta">defectuosas</span></div>
+        <div class="tarjeta"><span class="valor" id="por-minuto">0</span><span class="etiqueta">por minuto</span></div>
+        <div class="tarjeta"><span class="valor" id="confianza">–</span><span class="etiqueta">confianza prom.</span></div>
+      </div>
+      <h3>Por color</h3>
+      <div id="barras-color" class="barras"></div>
+      <h3>Por salida</h3>
+      <div id="barras-salida" class="barras"></div>
+    </section>
+
+    <!-- Configuración -->
+    <section class="panel">
+      <h2>Clasificación</h2>
+      <p class="dim">Salida 1: defectuosas · Salida 2: grupo A · Salida 3: resto y baja confianza</p>
+      <form id="form-settings">
+        <fieldset>
+          <legend>Colores del grupo A (salida 2)</legend>
+          <div id="colores-grupo-a" class="fila"></div>
+        </fieldset>
+        <label>Umbral de confianza
+          <input id="umbral" type="number" min="0" max="1" step="0.05">
+        </label>
+        <button class="btn" type="submit">Guardar</button>
+      </form>
+    </section>
+
+    <!-- Historial -->
+    <section class="panel ancho">
+      <h2>Historial</h2>
+      <div class="tabla-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Hora</th><th>Color</th><th>Defectuosa</th><th>Confianza</th><th>Salida</th><th>Desviada</th></tr></thead>
+          <tbody id="historial"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Fotos de rechazadas -->
+    <section class="panel ancho">
+      <h2>Rechazadas (defectuosas)</h2>
+      <div id="rechazadas" class="galeria"><p class="dim">Sin fotos todavía.</p></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

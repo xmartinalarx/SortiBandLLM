@@ -1,0 +1,10 @@
+paho-mqtt>=2.0
+fastapi>=0.110
+uvicorn>=0.29
+pymysql>=1.1
+python-dotenv>=1.0
+opencv-python>=4.9
+numpy>=1.26
+pytest>=8.0
+python-multipart>=0.0.9
+requests>=2.31

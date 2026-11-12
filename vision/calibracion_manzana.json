@@ -1,0 +1,8 @@
+{
+  "_nota": "Calibrado el 2026-11-05 con una manzana verde (tipo Granny Smith) y la webcam integrada del PC, luz de sala. La cámara la ve con tono 22-31: el verde empieza en 23. Recalibrar con manzanas amarillas y bajo la luz del túnel.",
+  "rangos_hue": {
+    "rojo": [[0, 10], [170, 179]],
+    "amarillo": [[15, 22]],
+    "verde": [[23, 85]]
+  }
+}

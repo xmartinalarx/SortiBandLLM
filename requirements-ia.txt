@@ -1,0 +1,14 @@
+# Dependencias del PC-IA (camara + modelo de Hugging Face en la GPU).
+# Se instalan ADEMAS de requirements.txt:
+#   set PYTHONUTF8=1
+#   pip install -r requirements.txt -r requirements-ia.txt
+#
+# PyTorch con CUDA 13.0 (driver NVIDIA con "CUDA Version: 13.0" o mas en nvidia-smi).
+# La version va FIJA: si no, pip elige la ultima de PyPI, que es solo para CPU.
+# Driver mas antiguo: cambiar cu130 por cu126 (misma version 2.14.1).
+# Sin GPU NVIDIA: borrar la linea --extra-index-url y la version fija de torch.
+# (Archivo sin tildes a proposito: pip en Windows lo lee con la codificacion antigua.)
+--extra-index-url https://download.pytorch.org/whl/cu130
+torch==2.14.1
+transformers>=4.45
+pillow>=10.0

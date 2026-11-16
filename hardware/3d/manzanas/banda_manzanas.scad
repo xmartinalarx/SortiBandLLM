@@ -1,6 +1,9 @@
 // Clasificador de manzanas: banda de eslabones de 200 mm, piñones, cama, paletas desviadoras y soporte de servo.
 // Unidades en mm. Exportar: openscad -D 'pieza="eslabon"' -o eslabon.stl banda_manzanas.scad
 // Piezas: "eslabon", "placa", "pinon", "cama", "paleta_a", "paleta_b", "paleta", "soporte_servo", "prueba", "cadena3"
+// Piezas para la base de madera: "portarod_motriz", "portarod_tensor", "soporte_motor", "soporte_ir",
+//   "baranda_carga_d", "baranda_carga_i", "baranda_ir_d", "baranda_ir_i", "baranda_final_d", "baranda_final_i",
+//   "rampa", "soporte_rampa_lateral", "soporte_rampa_final"
 
 pieza = "eslabon";
 
@@ -201,6 +204,234 @@ module prueba() {
     for (i = [0 : 2], k = [0 : i]) translate([6 + i * 12 - 3 + k * 2.2, 1, 8]) cube([1.2, 1.2, 0.8]);
 }
 
+// =====================================================================================
+// PIEZAS PARA LA BASE DE MADERA (2026-11-16)
+// Referencias del montaje (mm): centro de los ejes en z = 0; banda centrada en y = 0;
+// eje tensor en x = 0 y motriz en x = 1000. Base de madera: cara de arriba en z = -70.
+// Laterales de 112 x 9,4 x 1,8 cm: caras interiores en y = ±105, exteriores en ±123, borde de arriba en z = +24.
+// =====================================================================================
+z_sup    = r_paso + z_eje;   // superficie de la banda sobre el eje (~36,4)
+lat_top  = 24;               // borde de arriba de los laterales
+lat_in   = 105;              // cara interior del lateral
+lat_g    = 18;               // grosor de la madera
+d_608    = 22.3;             // rodamiento 608 (22 x 8 x 7) a presión
+h_608    = 7.3;
+d_torn   = 4.2;              // tornillo para madera de 4 mm (o M4)
+
+// ---------- PORTA-RODAMIENTO 608 ----------
+// Se atornilla por FUERA del lateral, centrado en el agujero (motriz) o en la ranura (tensor).
+// El rodamiento queda atrapado entre la pieza y la madera. El del eje tensor tiene ranuras
+// de ±10 mm para correr el eje y tensar la banda. Se imprime con la cara exterior abajo.
+module porta_rodamiento(tensor = false) {
+    L = tensor ? 70 : 50; H = 58; E = 12;   // z del montaje: de -34 a +24 (no sobresale del lateral)
+    sx = tensor ? 25 : 18;
+    difference() {
+        translate([-L / 2, -34, 0]) cube([L, H, E]);
+        translate([0, 0, E - h_608]) cylinder(d = d_608, h = h_608 + 1);            // rodamiento (cara hacia la madera)
+        translate([0, 0, -1]) cylinder(d = 12, h = E + 2);                          // paso del eje
+        for (zz = [-26, 16], s = [-1, 1]) {
+            if (tensor) hull() for (dx = [-10, 10]) translate([s * sx + dx, zz, -1]) cylinder(d = d_torn, h = E + 2);
+            else translate([s * sx, zz, -1]) cylinder(d = d_torn, h = E + 2);
+            if (tensor) hull() for (dx = [-10, 10]) translate([s * sx + dx, zz, -0.01]) cylinder(d1 = 8.6, d2 = d_torn, h = 2.2);
+            else translate([s * sx, zz, -0.01]) cylinder(d1 = 8.6, d2 = d_torn, h = 2.2);
+        }
+    }
+}
+
+// ---------- SOPORTE DEL MOTOR 28BYJ-48 ----------
+// Coordenadas propias: cara de arriba de la base en z = 0, eje del motor en z = 70 (igual que los ejes).
+// Placa vertical: las orejas del motor se atornillan por delante (lado del acople, y < 0) y el cuerpo
+// pasa por el agujero hacia atrás. El eje del 28BYJ-48 está 8 mm sobre el centro del cuerpo.
+// El pie va hacia el lateral, con ranuras de ±6 mm para alinear el motor con el acople.
+m_eje = 70; m_cuerpo = m_eje - 8; m_orejas = 35;
+module soporte_motor() {
+    difference() {
+        union() {
+            translate([-25, 0, 0]) cube([50, 5, m_eje + 12]);                        // placa
+            translate([-25, -28, 0]) cube([50, 33, 5]);                             // pie
+            for (x = [-25, 21]) hull() {                                            // escuadras
+                translate([x, 0, 5]) cube([4, 1, 32]);
+                translate([x, -26, 5]) cube([4, 1, 1]);
+            }
+        }
+        translate([0, -1, m_cuerpo]) rotate([-90, 0, 0]) cylinder(d = 29, h = 7, $fn = 96);   // cuerpo
+        translate([-9, -1, m_cuerpo - 26]) cube([18, 7, 26]);                                // caja de cables
+        for (s = [-1, 1]) translate([s * m_orejas / 2, -1, m_cuerpo]) rotate([-90, 0, 0]) cylinder(d = d_torn, h = 7);
+        for (s = [-1, 1]) hull() for (y = [-22, -10]) translate([s * 15, y, -1]) cylinder(d = d_torn, h = 7);
+    }
+}
+module imprimir_soporte_motor() { rotate([-90, 0, 0]) translate([0, -5, 0]) soporte_motor(); }
+
+// ---------- SOPORTE DEL SENSOR IR ----------
+// Uno a cada lado (emisor y receptor), sobre el borde de arriba del lateral en x = 170.
+// Coordenadas propias: borde del lateral en z = 0, cara interior en y = 0 (la madera va de y = 0 a 18).
+// Supuesto: emisor y receptor de 5 mm (LED IR + fototransistor). Si el sensor es otro, cambiar d_ir.
+d_ir = 5;
+z_haz = 56 - lat_top;   // el haz cruza a 56 mm sobre el eje (~20 mm sobre la banda, a media manzana)
+module soporte_ir() {
+    difference() {
+        union() {
+            translate([-15, 0, 0]) cube([30, lat_g, 4]);
+            translate([-7, 0, 0]) cube([14, 10, z_haz + 10]);
+        }
+        translate([0, -1, z_haz]) rotate([-90, 0, 0]) cylinder(d = d_ir + 0.2, h = 12);       // sensor
+        translate([0, 8.5, z_haz]) rotate([-90, 0, 0]) cylinder(d = d_ir + 1.4, h = 2);       // pestaña del LED
+        translate([-2, 7.5, 4]) cube([4, 3, z_haz - 4]);                                       // canal de cables
+        for (s = [-1, 1]) {
+            translate([s * 10.5, lat_g / 2 + 2, -1]) cylinder(d = 3.8, h = 6);
+            translate([s * 10.5, lat_g / 2 + 2, 2.2]) cylinder(d1 = 3.8, d2 = 7.6, h = 1.9);
+        }
+    }
+}
+
+// ---------- BARANDAS Y GUÍA DE CARGA ----------
+// Mantienen las manzanas centradas y en fila desde la carga (x = 0) hasta antes de la paleta 1 (x = 430).
+// Pared colgada 2 mm sobre la banda, sostenida por brazos desde postes atornillados al borde del lateral.
+// La guía de carga (embudo) estrecha el paso de 184 a 100 mm. Hay piezas derechas (+y) e izquierdas (-y).
+canal   = 100;            // paso libre entre barandas (manzanas de 70-85 mm)
+bar_bot = z_sup + 2;      // la pared no toca la banda
+bar_top = 72;
+esp_bar = 3;
+function y_embudo(x) = 92 + (canal / 2 - 92) * x / 150;
+
+module poste_baranda(x) {
+    difference() {
+        translate([x - 5, lat_in, lat_top]) cube([10, lat_g, bar_top - lat_top]);
+        translate([x, lat_in + lat_g / 2, lat_top - 1]) cylinder(d = 3.8, h = bar_top);
+        translate([x, lat_in + lat_g / 2, lat_top + 10]) cylinder(d = 8, h = bar_top);
+    }
+}
+module brazo_baranda(x, yw) { translate([x - 5, yw, bar_top - 4]) cube([10, lat_in + lat_g - yw, 4]); }
+
+module baranda_seg(tipo) {
+    if (tipo == "carga") {
+        hull() for (x = [0, 150]) translate([x, y_embudo(x) + esp_bar / 2, bar_bot]) cylinder(d = esp_bar, h = bar_top - bar_bot);
+        for (x = [10, 140]) { poste_baranda(x); brazo_baranda(x, y_embudo(x)); }
+    } else if (tipo == "ir") {
+        difference() {
+            translate([150, canal / 2, bar_bot]) cube([150, esp_bar, bar_top - bar_bot]);
+            translate([170, canal / 2 - 1, 56]) rotate([-90, 0, 0]) cylinder(d = 8, h = esp_bar + 2);   // paso del haz IR
+        }
+        for (x = [205, 290]) { poste_baranda(x); brazo_baranda(x, canal / 2); }
+    } else {
+        translate([300, canal / 2, bar_bot]) cube([130, esp_bar, bar_top - bar_bot]);
+        for (x = [310, 420]) { poste_baranda(x); brazo_baranda(x, canal / 2); }
+    }
+}
+// lado: 1 = derecha (+y), -1 = izquierda (-y). Se imprime boca abajo (cara de arriba sobre la cama, sin soportes).
+module baranda_impresa_derecha(tipo) {
+    x0 = tipo == "carga" ? 0 : tipo == "ir" ? 150 : 300;
+    translate([-x0 + 5, lat_in + lat_g + 5, bar_top]) rotate([180, 0, 0]) baranda_seg(tipo);
+}
+module imprimir_baranda(tipo, lado) {
+    if (lado > 0) baranda_impresa_derecha(tipo);
+    else translate([0, 100, 0]) mirror([0, 1, 0]) baranda_impresa_derecha(tipo);   // pieza izquierda (espejo)
+}
+
+// ---------- RAMPAS DE SALIDA ----------
+// Canaleta (la misma para las 3 salidas) + soportes. Pendiente de 20°.
+// Salidas 1 y 2: la canaleta empieza en el borde de la banda (y = 102, 1 mm bajo la superficie), pasa sobre
+// el lateral y baja hacia afuera; 2 soportes por rampa enganchan el lateral (arriba y por fuera).
+// Salida 3: la canaleta recibe la manzana al final de la banda; 2 soportes enganchan la punta de la base.
+ang_r   = 20;
+t_r     = tan(ang_r);
+esp_r   = 2.5;
+e_f     = esp_r / cos(ang_r);
+ancho_r = 116;            // 110 libres + 2 paredes de 3 mm (ventana de salida de 110 mm)
+largo_r = 180;
+s_torn  = 45;             // tornillos de la canaleta, medido a lo largo de la pendiente
+module rampa() {
+    difference() {
+        union() {
+            cube([ancho_r, largo_r, esp_r]);
+            for (x = [0, ancho_r - 3]) cube([3, largo_r, esp_r + 25]);
+        }
+        translate([-1, 0, 0]) rotate([45, 0, 0]) cube([ancho_r + 2, 4, 4]);          // bisel del borde de entrada
+        for (s = [-1, 1]) translate([ancho_r / 2 + s * 45, s_torn, -1]) cylinder(d = 3.4, h = esp_r + 2);
+    }
+}
+// Perfil en el plano (y, z) del montaje; se extruye 12 mm (se imprime acostado, sin soportes).
+z0_lat = 35.5;   // cara de arriba de la canaleta en su borde de entrada (y = 102)
+function u_lat(y) = z0_lat - (y - 102) * t_r - e_f;
+module soporte_rampa_lateral() {
+    p = [[105, lat_top], [105, u_lat(105)], [170, u_lat(170)], [127, -36], [123, -36], [123, lat_top]];
+    yt = 102 + s_torn * cos(ang_r); zt = z0_lat - s_torn * sin(ang_r);
+    difference() {
+        linear_extrude(12) polygon(p);
+        translate([110, -15, 6]) rotate([0, 90, 0]) cylinder(d = d_torn, h = 20);   // tornillo al costado del lateral
+        translate([127, -15, 6]) rotate([0, 90, 0]) cylinder(d = 8.5, h = 60);      // acceso del destornillador
+        translate([114, lat_top - 1, 6]) rotate([-90, 0, 0]) cylinder(d = 3.8, h = 40);   // tornillo al borde del lateral
+        translate([114, lat_top + 4, 6]) rotate([-90, 0, 0]) cylinder(d = 8, h = 40);
+        translate([yt, zt + 0.5, 6]) rotate([0, 0, -90 - ang_r]) rotate([0, 90, 0]) cylinder(d = 2.8, h = 16);   // M3 de la canaleta
+    }
+}
+z0_fin = 20;     // cara de arriba de la canaleta en su borde de entrada (x = 1042)
+function u_fin(x) = z0_fin - (x - 1042) * t_r - e_f;
+module soporte_rampa_final() {
+    p = [[1045, -70], [1045, u_fin(1045)], [1110, u_fin(1110)], [1079, -88], [1075, -88], [1075, -70]];
+    xt = 1042 + s_torn * cos(ang_r); zt = z0_fin - s_torn * sin(ang_r);
+    difference() {
+        linear_extrude(12) polygon(p);
+        translate([1060, -79, 6]) rotate([0, 90, 0]) cylinder(d = d_torn, h = 30);   // tornillo a la punta de la base
+        translate([1079, -79, 6]) rotate([0, 90, 0]) cylinder(d = 8.5, h = 60);
+        translate([1060, -71, 6]) rotate([-90, 0, 0]) cylinder(d = 3.8, h = 100);    // tornillo a la cara de arriba de la base
+        translate([1060, -62, 6]) rotate([-90, 0, 0]) cylinder(d = 8, h = 100);
+        translate([xt, zt + 0.5, 6]) rotate([0, 0, -90 - ang_r]) rotate([0, 90, 0]) cylinder(d = 2.8, h = 16);
+    }
+}
+
+// ---------- MONTAJE (para revisar en Blender; coordenadas del montaje en mm) ----------
+// openscad -D 'pieza="montaje_rampas"' -o rampas.stl banda_manzanas.scad   (grupos: portarod, motor, ir, barandas, rampas)
+module en_lado(s) { if (s > 0) children(); else mirror([0, 1, 0]) children(); }
+module montaje(grupo) {
+    if (grupo == "portarod") for (s = [-1, 1]) en_lado(s) {
+        multmatrix([[1, 0, 0, 0], [0, 0, -1, lat_in + lat_g + 12], [0, 1, 0, 0]]) porta_rodamiento(true);
+        multmatrix([[1, 0, 0, 1000], [0, 0, -1, lat_in + lat_g + 12], [0, 1, 0, 0]]) porta_rodamiento(false);
+    }
+    if (grupo == "motor") translate([1000, 173, -70]) soporte_motor();
+    if (grupo == "ir") for (s = [-1, 1]) en_lado(s) translate([170, lat_in, lat_top]) soporte_ir();
+    if (grupo == "barandas") for (s = [-1, 1]) en_lado(s) for (tp = ["carga", "ir", "final"]) baranda_seg(tp);
+    if (grupo == "rampas") {
+        // salida 1 (+y, x = 560-670) y salida 2 (-y, x = 855-965): canaleta + 2 soportes
+        for (r = [[615, 1], [910, -1]]) en_lado(r[1]) {
+            o = [r[0] - ancho_r / 2, 102 - esp_r * sin(ang_r), z0_lat - esp_r * cos(ang_r)];
+            multmatrix([[1, 0, 0, o[0]], [0, cos(ang_r), sin(ang_r), o[1]], [0, -sin(ang_r), cos(ang_r), o[2]]]) rampa();
+            for (dx = [-45, 45]) multmatrix([[0, 0, 1, r[0] + dx - 6], [1, 0, 0, 0], [0, 1, 0, 0]]) soporte_rampa_lateral();
+        }
+        // salida 3 (al final de la banda)
+        o3 = [1042 - esp_r * sin(ang_r), ancho_r / 2, z0_fin - esp_r * cos(ang_r)];
+        multmatrix([[0, cos(ang_r), sin(ang_r), o3[0]], [-1, 0, 0, o3[1]], [0, -sin(ang_r), cos(ang_r), o3[2]]]) rampa();
+        for (yb = [-45, 45]) multmatrix([[1, 0, 0, 0], [0, 0, -1, yb + 6], [0, 1, 0, 0]]) soporte_rampa_final();
+    }
+}
+
+// ---------- PLACAS PARA IMPRIMIR (cama de 220 x 220 mm) ----------
+// Cada placa junta varias piezas ya orientadas para imprimir, sin salirse de la cama.
+module placa_base(n) {
+    if (n == 6) {   // 4 porta-rodamientos + soporte del motor + 2 soportes IR
+        translate([35, 34, 0]) porta_rodamiento(true);
+        translate([110, 34, 0]) porta_rodamiento(true);
+        translate([175, 34, 0]) porta_rodamiento(false);
+        translate([25, 97, 0]) porta_rodamiento(false);
+        translate([80, 63, 0]) imprimir_soporte_motor();
+        translate([125, 63, 0]) soporte_ir();
+        translate([160, 63, 0]) soporte_ir();
+    }
+    if (n == 7 || n == 8 || n == 9) {   // baranda derecha + izquierda del mismo tramo
+        tp = n == 7 ? "carga" : n == 8 ? "ir" : "final";
+        imprimir_baranda(tp, 1);
+        translate([0, 61, 0]) imprimir_baranda(tp, -1);
+    }
+    if (n == 10) {   // rampa de una salida lateral + sus 2 soportes
+        rampa();
+        for (k = [0, 1]) translate([122 - 105, 36 + k * 75, 0]) soporte_rampa_lateral();
+    }
+    if (n == 11) {   // rampa de la salida 3 + sus 2 soportes
+        rampa();
+        for (k = [0, 1]) translate([122 - 1045, 88 + k * 110, 0]) soporte_rampa_final();
+    }
+}
+
 if (pieza == "eslabon") eslabon();
 else if (pieza == "placa") placa();
 else if (pieza == "pinon") pinon();
@@ -211,3 +442,27 @@ else if (pieza == "paleta") paleta_completa();
 else if (pieza == "soporte_servo") soporte_servo();
 else if (pieza == "prueba") prueba();
 else if (pieza == "cadena3") cadena3();
+else if (pieza == "portarod_motriz") porta_rodamiento(false);
+else if (pieza == "portarod_tensor") porta_rodamiento(true);
+else if (pieza == "soporte_motor") imprimir_soporte_motor();
+else if (pieza == "soporte_ir") soporte_ir();
+else if (pieza == "baranda_carga_d") imprimir_baranda("carga", 1);
+else if (pieza == "baranda_carga_i") imprimir_baranda("carga", -1);
+else if (pieza == "baranda_ir_d") imprimir_baranda("ir", 1);
+else if (pieza == "baranda_ir_i") imprimir_baranda("ir", -1);
+else if (pieza == "baranda_final_d") imprimir_baranda("final", 1);
+else if (pieza == "baranda_final_i") imprimir_baranda("final", -1);
+else if (pieza == "rampa") rampa();
+else if (pieza == "soporte_rampa_lateral") soporte_rampa_lateral();
+else if (pieza == "soporte_rampa_final") soporte_rampa_final();
+else if (pieza == "placa_06") placa_base(6);
+else if (pieza == "placa_07") placa_base(7);
+else if (pieza == "placa_08") placa_base(8);
+else if (pieza == "placa_09") placa_base(9);
+else if (pieza == "placa_10") placa_base(10);
+else if (pieza == "placa_11") placa_base(11);
+else if (pieza == "montaje_portarod") montaje("portarod");
+else if (pieza == "montaje_motor") montaje("motor");
+else if (pieza == "montaje_ir") montaje("ir");
+else if (pieza == "montaje_barandas") montaje("barandas");
+else if (pieza == "montaje_rampas") montaje("rampas");

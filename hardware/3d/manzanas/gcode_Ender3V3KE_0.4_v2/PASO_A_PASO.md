@@ -21,6 +21,19 @@ Estos archivos `.gcode` están listos para la **Ender-3 V3 KE** (pantalla tácti
 | `04_soportes_servo_v2.gcode` | 2 soportes para servo MG996R | 3 h 24 min | 67 g |
 | `05_pinones_v2.gcode` | 3 piñones | 4 h 10 min | 70 g |
 
+**Piezas para la base de madera** (agregadas el 2026-11-16, mismo perfil):
+
+| Archivo | Qué imprime | Tiempo | Filamento |
+|---|---|---|---|
+| `06_portarod_motor_ir_v2.gcode` | 4 porta-rodamientos 608 (2 con ranura, eje tensor) + soporte del motor + 2 soportes del sensor IR | 6 h 46 min | 125 g |
+| `07_barandas_carga_v2.gcode` | Guía de carga (embudo), derecha e izquierda | 4 h 16 min | 76 g |
+| `08_barandas_ir_v2.gcode` | Barandas del tramo del sensor IR (con paso para el haz), derecha e izquierda | 4 h 10 min | 75 g |
+| `09_barandas_final_v2.gcode` | Barandas hasta la paleta 1, derecha e izquierda | 3 h 59 min | 70 g |
+| `10_rampa_lateral_v2.gcode` | Rampa + 2 soportes. **Imprimir 2 veces** (salida 1 y salida 2) | 4 h 21 min c/u | 97 g c/u |
+| `11_rampa_final_v2.gcode` | Rampa + 2 soportes de la salida 3 (final de la banda) | 5 h 58 min | 130 g |
+
+Total de estas piezas: ~34 h y ~670 g de PETG. Sus STL están en `stl/piezas_base/` y `stl/placas_base/`.
+
 Los tiempos son estimaciones del laminador y pueden variar ±20 %.
 
 ## Qué imprime cada integrante

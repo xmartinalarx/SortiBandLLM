@@ -198,6 +198,7 @@ Cada integrante imprime 28 eslabones (4 placas de 7) más un subsistema, con el 
 | Persona 4 | Eslabones + 3 piñones (eje motriz) + 1 cama | ~28 h |
 | **Total** | | **~115 h**, ~2,1 kg de PETG + ~70 g de pasadores |
 
+- **Piezas nuevas para la base de madera (2026-11-16):** G-code 06 a 11, ~34 h y ~670 g más (el 10 se imprime 2 veces).
 - **Avance (2026-11-12):** prueba de tolerancia hecha y **4 placas de eslabones impresas** (28 de 112). Faltan 12 placas de eslabones (~65 h) + paletas, 5 camas, soportes y 2 placas de piñones (~27,5 h): ~92 h en total, ~46 h por impresora con las **2 impresoras** disponibles (modelo de la segunda: por confirmar; los G-code `_v2` son solo para la KE).
 - **La KE solo lee `.gcode`**, desde un USB FAT32 con nombres sin espacios ni tildes. Usar solo los de `hardware/3d/manzanas/gcode_Ender3V3KE_0.4_v2/` (terminan en `_v2`); guía en su `PASO_A_PASO.md`.
 - **Error key:2111:** lo daban los G-code v1, que extruían antes de que la boquilla volviera a 240 °C después de nivelar. Los v2 calientan (`M190`/`M109`) después de `START_PRINT`.
@@ -394,10 +395,10 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 
 ## Pendiente de diseño
 
-- **Bastidor: base de madera** (decidido el 2026-11-16), MDF o terciado de 1,8 cm: base 115 × 40 cm, 2 laterales de 112 × 9,4 cm parados de canto a 21 cm entre caras interiores, y 2 listones de 2 × 2 × 90 cm por dentro (al ras arriba) donde apoya la cama. Ejes a 7 cm de la base, en x = 6 y 106 cm desde la punta del lateral: ranura de 3,4 × 1,4 cm (tensor) y agujero de Ø 1,4 cm (motriz). Plano: `hardware/3d/manzanas/imagenes/base_madera_medidas.png`; detalle en `docs/informes/Materiales_y_piezas_SortiBandLLM.docx`. Falta diseñar: 4 porta-rodamientos 608 (por fuera de los laterales) y el soporte del motor.
+- **Bastidor: base de madera** (decidido el 2026-11-16), MDF o terciado de 1,8 cm: base 115 × 40 cm, 2 laterales de 112 × 9,4 cm parados de canto a 21 cm entre caras interiores, y 2 listones de 2 × 2 × 90 cm por dentro (al ras arriba) donde apoya la cama. Ejes a 7 cm de la base, en x = 6 y 106 cm desde la punta del lateral: ranura de 3,4 × 1,4 cm (tensor) y agujero de Ø 1,4 cm (motriz). Plano: `hardware/3d/manzanas/imagenes/base_madera_medidas.png`; detalle en `docs/informes/Materiales_y_piezas_SortiBandLLM.docx`. Piezas impresas que se atornillan a la base: **diseñadas el 2026-11-16** (ver abajo).
 - Túnel de cámara (opcional, muy recomendado): **caja de cartón** de 160 × 260 × 220 mm sin tapas en los extremos, interior blanco mate, tira LED USB adentro y la webcam en un agujero del techo (~200 mm sobre x = 280). No se imprime (decisión del 2026-11-16).
-- Rampas de salida y contenedores.
-- Barandas laterales y guías de carga para poner las manzanas en fila.
+- **Diseñadas el 2026-11-16** en `banda_manzanas.scad` (STL en `stl/piezas_base/` y `stl/placas_base/`, G-code 06 a 11 en `gcode_Ender3V3KE_0.4_v2/`, detalle y tornillos en `hardware/3d/manzanas/LEEME.md`): 4 porta-rodamientos 608 (2 con ranura de ±10 mm para tensar), soporte del motor 28BYJ-48, 2 soportes del sensor IR (**supuesto: emisor y receptor de 5 mm**; parámetro `d_ir`), barandas y guía de carga (paso de 100 mm, de x = 0 a 430, con agujero para el haz IR) y 3 rampas de salida con sus soportes (pendiente 20°). Total ~34 h y ~670 g de PETG. Verificado en el montaje de Blender (`blender/actualizar_escena.py`), sin choques.
+- Contenedores de las 3 salidas: cajas o bandejas compradas, al lado de la base y al final.
 - Poste de la webcam de supervisión.
 - Actualizar el informe Parte 1 de M&M a manzanas.
 

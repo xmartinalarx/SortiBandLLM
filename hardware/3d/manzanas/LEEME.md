@@ -71,6 +71,23 @@ Filamento total: ~2,1 kg de PETG, más ~70 g para los pasadores (PLA+ de 1,75 mm
 | Tornillos M4 | 4 |
 | Cargador de celular 5 V (≥ 2 A) para los servos y el motor | 1 |
 
+## Piezas para la base de madera (2026-11-16)
+
+La estructura es una base de madera (plano con medidas en cm: `imagenes/base_madera_medidas.png`). Estas piezas se atornillan a ella; están en `banda_manzanas.scad`, sus STL en `stl/piezas_base/` y los G-code en `gcode_Ender3V3KE_0.4_v2/` (06 a 11).
+
+| Pieza | Cant. | Dónde va | Tornillos |
+|---|---|---|---|
+| Porta-rodamiento 608, eje motriz | 2 | Por fuera de cada lateral, centrado en el agujero de Ø 1,4 cm (x = 106 cm). El rodamiento queda atrapado contra la madera | 4 × 20 mm para madera, 4 por pieza |
+| Porta-rodamiento 608, eje tensor (con ranuras) | 2 | Por fuera de cada lateral, en la ranura (x = 6 cm). Se corre ±1 cm para tensar la banda y se aprietan los tornillos | 4 × 20 mm, 4 por pieza |
+| Soporte del motor 28BYJ-48 | 1 | Sobre la base, del lado del motor, frente al eje motriz. Las orejas del motor van por delante (M4 × 10 con tuerca); el pie tiene ranuras para alinear el motor con el acople | 2 × 4 × 20 mm en el pie |
+| Soporte del sensor IR | 2 | Sobre el borde de los laterales en x = 17 cm, uno a cada lado; el haz cruza a ~2 cm sobre la banda. **Supuesto: emisor y receptor de 5 mm** (cambiar `d_ir` si el sensor es otro) | 2 × 3,5 × 16 mm por pieza |
+| Barandas y guía de carga | 6 (3 por lado) | Sobre el borde de los laterales, de x = 0 a 43 cm. Dejan un paso de 10 cm; la del tramo del sensor tiene un agujero para el haz | 1 × 3,5 × 25 mm por poste (12 en total) |
+| Rampa de salida | 3 | Salida 1 (+y, x = 56–67 cm), salida 2 (−y, x = 85–97 cm) y salida 3 (al final de la banda). Pendiente de 20° | 2 × M3 × 16 por rampa (a sus soportes) |
+| Soporte de rampa lateral | 4 | Enganchan el lateral por arriba y por fuera | 2 × 3,5 × 20 mm por pieza |
+| Soporte de rampa final | 2 | Enganchan la punta de la base | 2 × 3,5 × 20 mm por pieza |
+
+Las rampas dejan caer la manzana en un contenedor puesto al lado de la base (salidas 1 y 2) y al final (salida 3).
+
 ## Armado
 
 1. Cada integrante arma su tramo de 28 eslabones; luego se unen los 4 tramos y se cierra la banda con 110 eslabones.

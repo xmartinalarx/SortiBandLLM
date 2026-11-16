@@ -94,24 +94,34 @@ for lado, s in (("A", -1), ("B", 1)):
 # ---------- Ejes de 300 mm, porta-rodamientos y rodamientos ----------
 cilindro("Eje tensor 300 mm", col_ejes, m_acero, (0, 0, 0), 4, 300)
 cilindro("Eje motriz 300 mm", col_ejes, m_acero, (1000, 15, 0), 4, 300)   # sobrante hacia el motor
-for xc, nombre, largo_x in ((0, "tensor", 64), (1000, "motriz", 44)):
-    for s in (-1, 1):
-        caja(f"Porta-rodamiento {nombre} {'+' if s > 0 else '-'}", col_ejes, m_gris, (xc, s * 129, 0), (largo_x, 12, 44))
-        cilindro(f"Rodamiento 608 {nombre} {'+' if s > 0 else '-'}", col_ejes, m_acero, (xc, s * 136, 0), 11, 3)
+# Piezas impresas reales, exportadas de banda_manzanas.scad ya ubicadas (carpeta montaje_base/)
+def importar(nombre, archivo, col, mat):
+    antes = set(bpy.data.objects)
+    bpy.ops.wm.stl_import(filepath=os.path.join(AQUI, "montaje_base", archivo))
+    o = (set(bpy.data.objects) - antes).pop(); o.name = nombre
+    o.data.transform(Matrix.Scale(S, 4)); o.data.materials.clear(); o.data.materials.append(mat)
+    for c in o.users_collection: c.objects.unlink(o)
+    col.objects.link(o); return o
+
+m_impreso = material("Piezas nuevas (PETG gris)", (0.45, 0.47, 0.52), 0.5)
+col_imp = coleccion("Piezas impresas nuevas")
+importar("Porta-rodamientos 608", "portarod.stl", col_imp, m_impreso)
+importar("Soporte del motor", "motor.stl", col_imp, m_impreso)
+importar("Soportes del sensor IR", "ir.stl", col_imp, m_impreso)
+importar("Barandas y guía de carga", "barandas.stl", col_imp, m_impreso)
+importar("Rampas de salida", "rampas.stl", col_imp, material("Rampas (PETG verde)", (0.20, 0.55, 0.30), 0.5))
 
 # ---------- Motor 28BYJ-48 + acople + soporte ----------
 cilindro("Acople 5-8 mm", col_mot, m_acero, (1000, 158, 0), 9.5, 25)
 cilindro("Motor 28BYJ-48", col_mot, m_motor, (1000, 181, -8), 14, 19)      # su eje está 8 mm sobre el centro
 cilindro("Tapa reductora", col_mot, m_azul, (1000, 171, 0), 4.5, 3)
 caja("Caja de cables del motor", col_mot, m_azul, (1000, 186, -22), (17, 14, 6))
-caja("Soporte del motor (impreso)", col_mot, m_gris, (1000, 181, (Z_BASE - 22) / 2), (44, 24, Z_BASE * -1 - 22))
 caja("Placa ULN2003", col_elec, m_pcb, (905, 165, Z_BASE + 2), (35, 32, 1.6))
 caja("Chip ULN2003", col_elec, m_negro, (905, 160, Z_BASE + 4), (20, 7, 3))
 
 # ---------- Sensor IR de barrera (x = 170), sobre los laterales ----------
 for s, nombre in ((-1, "emisor"), (1, "receptor")):
-    caja(f"Sensor IR {nombre}", col_elec, m_negro, (170, s * 114, 34), (12, 12, 20))
-    cilindro(f"Lente IR {nombre}", col_elec, m_rojo, (170, s * 107, 38), 2.5, 2)
+    cilindro(f"Sensor IR {nombre} (5 mm)", col_elec, m_rojo, (170, s * 108, 56), 2.5, 9)
 
 # ---------- Electrónica sobre la base (franja libre del lado -Y) ----------
 caja("Arduino UNO R4 WiFi", col_elec, m_arduino, (640, -162, Z_BASE + 4), (68.6, 53.4, 1.6))

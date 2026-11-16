@@ -17,3 +17,6 @@ driver/
 
 # Archivos temporales de Word
 ~$*
+
+# Respaldos automáticos de Blender
+*.blend1

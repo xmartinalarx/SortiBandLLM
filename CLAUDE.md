@@ -180,7 +180,7 @@ Medido desde el eje del piñón tensor (x = 0), en el sentido de avance.
 | Pulsador de emergencia (push button) | 1 | Control |
 | Webcam USB de supervisión (por confirmar) | 1 | Supervisión |
 | Cargador de celular 5 V (≥ 2 A, ideal 3 A) para los servos y el motor | 1 | Potencia |
-| Eje de acero de 8 × 260 mm | 2 | Mecánica |
+| Eje de acero de 8 × 300 mm (sin cortar: con la base de madera hacen falta ~265 mm) | 2 | Mecánica |
 | Rodamiento 608 | 4 | Mecánica |
 | Acople flexible de 5 a 8 mm | 1 | Mecánica |
 | Tornillos M3 × 16 con tuerca (~30) y M4 (4) | — | Mecánica |
@@ -321,6 +321,7 @@ Registrar una matriz de confusión (color real vs. clasificado; buena vs. defect
 | Clasificación OpenCV → IA de Hugging Face (CLIP) con OpenCV de respaldo | El grupo quiere que una IA mire la cámara y decida; CLIP funciona sin entrenar |
 | Un PC → dos (PC-IA con GPU y webcam; PC-servidor con lo demás) | La IA usa la GPU sin competir con la BD y el servidor; suma un nodo a la red IoT |
 | Red de la U → hotspot del celular POCOX7Pro | La red de la U es de 5 GHz y abierta; el R4 solo usa 2,4 GHz. Plan B probado: zona WiFi del PC |
+| Bastidor por diseñar → base de madera (MDF/terciado 1,8 cm) | Más rápida y rígida que imprimir la estructura larga; solo se imprimen porta-rodamientos y soporte del motor (2026-11-16) |
 | Hotspot del celular → zona WiFi TARRO del PC-servidor (IP fija 192.168.137.1) | El celular daba otra IP en cada conexión y había que cambiar `secrets.h` y volver a cargar el firmware (2026-11-12) |
 | Impresora genérica tipo Ender-3 → Ender-3 V3 KE del laboratorio, G-code `_v2` | Es la máquina real; los G-code v1 daban el error key:2111 |
 | Agujero del eslabón 2,0 → 2,1 mm | Con 2,0 mm el pasador se traba en las 9 bisagras |
@@ -393,8 +394,8 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 
 ## Pendiente de diseño
 
-- Bastidor: laterales con alojamiento para rodamientos 608, ranura del tensor y patas.
-- Túnel de cámara (160 × 260 × 220 mm, en paneles impresos) con soporte de webcam y LED.
+- **Bastidor: base de madera** (decidido el 2026-11-16), MDF o terciado de 1,8 cm: base 115 × 40 cm, 2 laterales de 112 × 9,4 cm parados de canto a 21 cm entre caras interiores, y 2 listones de 2 × 2 × 90 cm por dentro (al ras arriba) donde apoya la cama. Ejes a 7 cm de la base, en x = 6 y 106 cm desde la punta del lateral: ranura de 3,4 × 1,4 cm (tensor) y agujero de Ø 1,4 cm (motriz). Plano: `hardware/3d/manzanas/imagenes/base_madera_medidas.png`; detalle en `docs/informes/Materiales_y_piezas_SortiBandLLM.docx`. Falta diseñar: 4 porta-rodamientos 608 (por fuera de los laterales) y el soporte del motor.
+- Túnel de cámara (opcional, muy recomendado): **caja de cartón** de 160 × 260 × 220 mm sin tapas en los extremos, interior blanco mate, tira LED USB adentro y la webcam en un agujero del techo (~200 mm sobre x = 280). No se imprime (decisión del 2026-11-16).
 - Rampas de salida y contenedores.
 - Barandas laterales y guías de carga para poner las manzanas en fila.
 - Poste de la webcam de supervisión.

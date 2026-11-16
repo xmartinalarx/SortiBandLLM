@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1260" viewBox="0 0 1240 1260" font-family="Arial, Helvetica, sans-serif">
+  <!-- Plano de la base de madera de SortiBandLLM. Todas las medidas en cm. -->
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#C0392B"/>
+    </marker>
+  </defs>
+  <rect width="1240" height="1260" fill="#FFFFFF"/>
+  <text x="40" y="44" font-size="26" font-weight="bold" fill="#1F4E79">Base de madera — medidas en centímetros</text>
+  <text x="40" y="70" font-size="15" fill="#555">MDF o terciado de 1,8 cm. Cotas en rojo. Dibujo a escala aproximada.</text>
+
+  <!-- ===================== 1. LATERAL ===================== -->
+  <text x="40" y="108" font-size="18" font-weight="bold" fill="#333">1. Lateral (hacer 2 iguales) — visto de lado</text>
+  <!-- lateral 112 x 9,4 -->
+  <rect x="100" y="150" width="997" height="84" fill="#EAD2A4" stroke="#A07A40" stroke-width="2"/>
+  <!-- liston de la cama (por la cara interior), de 11 a 101 cm, al ras arriba -->
+  <rect x="198" y="150" width="801" height="18" fill="#D4B27A" stroke="#8A5A1A" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="520" y="164" font-size="12" fill="#5A3A0A">listón 90 × 2 × 2 cm (por dentro, al ras arriba)</text>
+  <!-- ranura del eje tensor: centro a 6 cm, 3,4 x 1,4 -->
+  <rect x="138" y="165" width="30" height="13" rx="6.5" fill="#FFFFFF" stroke="#333" stroke-width="2"/>
+  <circle cx="153" cy="171.5" r="3" fill="#333"/>
+  <!-- agujero del eje motriz: centro a 106 cm, diametro 1,4 -->
+  <circle cx="1043" cy="171.5" r="6.5" fill="#FFFFFF" stroke="#333" stroke-width="2"/>
+  <circle cx="1043" cy="171.5" r="2" fill="#333"/>
+
+  <g stroke="#C0392B" stroke-width="1.3" fill="none">
+    <!-- largo total -->
+    <line x1="100" y1="236" x2="100" y2="280"/><line x1="1097" y1="236" x2="1097" y2="280"/>
+    <line x1="100" y1="274" x2="1097" y2="274" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- 6 cm al eje tensor y 100 cm entre ejes -->
+    <line x1="153" y1="148" x2="153" y2="118"/><line x1="1043" y1="148" x2="1043" y2="118"/>
+    <line x1="100" y1="148" x2="100" y2="118"/><line x1="1097" y1="148" x2="1097" y2="118"/>
+    <line x1="100" y1="124" x2="153" y2="124" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="153" y1="124" x2="1043" y2="124" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="1043" y1="124" x2="1097" y2="124" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- alto 9,4 -->
+    <line x1="1099" y1="150" x2="1130" y2="150"/><line x1="1099" y1="234" x2="1130" y2="234"/>
+    <line x1="1124" y1="150" x2="1124" y2="234" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- altura del eje 7 -->
+    <line x1="1050" y1="171.5" x2="1078" y2="171.5"/>
+    <line x1="1072" y1="171.5" x2="1072" y2="234" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- liston de 11 a 101 -->
+    <line x1="198" y1="236" x2="198" y2="252"/><line x1="999" y1="236" x2="999" y2="252"/>
+    <line x1="100" y1="246" x2="198" y2="246" marker-start="url(#a)" marker-end="url(#a)"/>
+  </g>
+  <g font-size="14" fill="#C0392B" font-weight="bold">
+    <text x="570" y="294">112 cm</text>
+    <text x="108" y="143" font-size="12">6 cm</text>
+    <text x="545" y="143">100 cm entre ejes</text>
+    <text x="1050" y="143" font-size="12">6 cm</text>
+    <text x="1134" y="197">9,4 cm</text>
+    <text x="1040" y="214" font-size="13">7 cm</text>
+    <text x="128" y="263" font-size="13">11 cm</text>
+  </g>
+  <g font-size="13" fill="#333">
+    <text x="100" y="318">◄ ranura del eje TENSOR: 3,4 cm de largo × 1,4 cm de alto, centrada a 6 cm de la punta y a 7 cm del borde de abajo</text>
+    <text x="100" y="338">◄ agujero del eje MOTRIZ: Ø 1,4 cm, a 106 cm de la misma punta y a 7 cm del borde de abajo</text>
+    <text x="100" y="358">◄ listón de la cama: desde 11 cm hasta 101 cm, por la cara de ADENTRO, con su cara de arriba al ras del borde superior</text>
+  </g>
+
+  <!-- ===================== 2. BASE DESDE ARRIBA ===================== -->
+  <text x="40" y="392" font-size="18" font-weight="bold" fill="#333">2. Base vista desde arriba</text>
+  <!-- base 115 x 40 -->
+  <rect x="100" y="420" width="989" height="344" fill="#F3E3C3" stroke="#A07A40" stroke-width="2"/>
+  <!-- banda (referencia) -->
+  <rect x="140" y="506" width="908" height="172" fill="#D9D9D9" fill-opacity="0.7" stroke="#888" stroke-dasharray="5 4"/>
+  <text x="520" y="596" font-size="14" fill="#555">banda (20 cm de ancho)</text>
+  <!-- laterales -->
+  <rect x="113" y="486" width="963" height="16" fill="#EAD2A4" stroke="#8A5A1A" stroke-width="2"/>
+  <rect x="113" y="682" width="963" height="16" fill="#EAD2A4" stroke="#8A5A1A" stroke-width="2"/>
+  <!-- listones -->
+  <rect x="207" y="502" width="775" height="17" fill="#D4B27A" stroke="#8A5A1A" stroke-dasharray="5 3"/>
+  <rect x="207" y="665" width="775" height="17" fill="#D4B27A" stroke="#8A5A1A" stroke-dasharray="5 3"/>
+  <!-- ejes de 30 cm -->
+  <rect x="161" y="463" width="7" height="258" fill="#7F7F7F"/>
+  <rect x="1021" y="471" width="7" height="258" fill="#7F7F7F"/>
+  <!-- porta-rodamientos por fuera -->
+  <g fill="#8E7CC3" stroke="#5B4A9A"><rect x="151" y="474" width="27" height="12"/><rect x="151" y="698" width="27" height="12"/><rect x="1011" y="474" width="27" height="12"/><rect x="1011" y="698" width="27" height="12"/></g>
+  <!-- acople y motor -->
+  <rect x="1019" y="729" width="11" height="10" fill="#555"/>
+  <circle cx="1024" cy="752" r="13" fill="#C9A227" stroke="#8A6D0F" stroke-width="2"/>
+  <text x="1042" y="757" font-size="12" fill="#333">motor</text>
+
+  <g stroke="#C0392B" stroke-width="1.3" fill="none">
+    <!-- largo 115 -->
+    <line x1="100" y1="766" x2="100" y2="800"/><line x1="1089" y1="766" x2="1089" y2="800"/>
+    <line x1="100" y1="792" x2="1089" y2="792" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- ancho 40 -->
+    <line x1="1091" y1="420" x2="1125" y2="420"/><line x1="1091" y1="764" x2="1125" y2="764"/>
+    <line x1="1118" y1="420" x2="1118" y2="764" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- 21 entre laterales -->
+    <line x1="600" y1="502" x2="600" y2="682" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- 7,7 del borde al lateral -->
+    <line x1="300" y1="420" x2="300" y2="486" marker-start="url(#a)" marker-end="url(#a)"/>
+    <!-- 1,5 de margen en los extremos -->
+    <line x1="100" y1="440" x2="113" y2="440"/>
+    <!-- 7,5 al eje tensor -->
+    <line x1="100" y1="455" x2="164" y2="455" marker-start="url(#a)" marker-end="url(#a)"/>
+  </g>
+  <g font-size="14" fill="#C0392B" font-weight="bold">
+    <text x="565" y="812">115 cm</text>
+    <text x="1128" y="597">40 cm</text>
+    <text x="608" y="560">21 cm</text>
+    <text x="608" y="576" font-size="12" font-weight="normal">(entre caras interiores)</text>
+    <text x="308" y="458">7,7 cm</text>
+    <text x="106" y="436" font-size="12">1,5</text>
+    <text x="172" y="452" font-size="12">7,5 cm al eje</text>
+  </g>
+  <g font-size="13" fill="#333">
+    <text x="100" y="840">Laterales de 112 cm centrados a lo largo (1,5 cm de margen en cada punta) y a 7,7 cm de cada borde largo de la base.</text>
+    <text x="100" y="860">Ejes de 30 cm SIN cortar; en el eje motriz el sobrante va hacia el lado del motor (el acople necesita ~1,2 cm de eje).</text>
+  </g>
+
+  <!-- ===================== 3. CORTE TRANSVERSAL ===================== -->
+  <text x="40" y="906" font-size="18" font-weight="bold" fill="#333">3. Corte transversal (mirando desde la punta de la base)</text>
+  <!-- base -->
+  <rect x="100" y="1150" width="440" height="20" fill="#F3E3C3" stroke="#A07A40" stroke-width="2"/>
+  <!-- laterales -->
+  <rect x="185" y="1047" width="20" height="103" fill="#EAD2A4" stroke="#8A5A1A" stroke-width="2"/>
+  <rect x="435" y="1047" width="20" height="103" fill="#EAD2A4" stroke="#8A5A1A" stroke-width="2"/>
+  <!-- listones 2x2 -->
+  <rect x="205" y="1047" width="22" height="22" fill="#D4B27A" stroke="#8A5A1A"/>
+  <rect x="413" y="1047" width="22" height="22" fill="#D4B27A" stroke="#8A5A1A"/>
+  <!-- cama 0,3 -->
+  <rect x="211" y="1043" width="218" height="4" fill="#FFFFFF" stroke="#666"/>
+  <!-- banda: tramo de arriba y de abajo -->
+  <rect x="210" y="1033" width="220" height="9" fill="#4A4A4A"/>
+  <rect x="210" y="1104" width="220" height="9" fill="#4A4A4A"/>
+  <!-- piñones -->
+  <g fill="#FFFFFF" stroke="#4A4A4A" stroke-width="2"><rect x="234" y="1038" width="16" height="70"/><rect x="312" y="1038" width="16" height="70"/><rect x="390" y="1038" width="16" height="70"/></g>
+  <!-- eje -->
+  <rect x="155" y="1069" width="330" height="8" fill="#7F7F7F"/>
+  <!-- porta-rodamientos -->
+  <rect x="172" y="1058" width="13" height="30" fill="#8E7CC3" stroke="#5B4A9A"/>
+  <rect x="455" y="1058" width="13" height="30" fill="#8E7CC3" stroke="#5B4A9A"/>
+
+  <g stroke="#C0392B" stroke-width="1.3" fill="none">
+    <line x1="100" y1="1214" x2="540" y2="1214" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="205" y1="1186" x2="435" y2="1186" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="560" y1="1047" x2="560" y2="1150" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="600" y1="1073" x2="600" y2="1150" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="640" y1="1113" x2="640" y2="1150" marker-start="url(#a)" marker-end="url(#a)"/>
+    <line x1="540" y1="1047" x2="565" y2="1047"/><line x1="485" y1="1073" x2="605" y2="1073"/><line x1="430" y1="1113" x2="645" y2="1113"/>
+  </g>
+  <g font-size="14" fill="#C0392B" font-weight="bold">
+    <text x="300" y="1236">40 cm</text>
+    <text x="300" y="1204" font-size="13">21 cm</text>
+  </g>
+  <g font-size="13" fill="#333">
+    <text x="566" y="1060" fill="#C0392B" font-weight="bold">9,4 cm</text>
+    <text x="606" y="1094" fill="#C0392B" font-weight="bold">7 cm (eje)</text>
+    <text x="646" y="1140" fill="#C0392B" font-weight="bold">3,4 cm libres bajo la banda</text>
+    <text x="700" y="960">• Banda: 20 cm de ancho, pasa por arriba de la cama.</text>
+    <text x="700" y="982">• Cama de deslizamiento (0,3 cm) apoyada sobre los 2 listones.</text>
+    <text x="700" y="1004">• Listones 2 × 2 cm, al ras del borde de arriba del lateral.</text>
+    <text x="700" y="1026">• Laterales: 9,4 cm de alto, 1,8 cm de grosor.</text>
+    <text x="700" y="1048">• Eje (Ø 0,8 cm) a 7 cm sobre la base, con 3 piñones.</text>
+    <text x="700" y="1070">• Porta-rodamientos (impresos) por FUERA de cada lateral.</text>
+    <text x="700" y="1092">• Base: 1,8 cm de grosor.</text>
+  </g>
+</svg>

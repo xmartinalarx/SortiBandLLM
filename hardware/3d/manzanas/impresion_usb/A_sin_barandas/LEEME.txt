@@ -1,25 +1,24 @@
-﻿SortiBandLLM - Carpeta A: SIN BARANDAS (versión mínima, 100 % funcional)
+SortiBandLLM - Carpeta A: SIN BARANDAS (versión mínima, 100 % funcional)
 Impresora: Creality Ender-3 V3 KE, PETG blanco. Copiar esta carpeta a un USB FAT32.
 
-Imprimir en orden. "xN" = imprimir ese mismo archivo N veces.
-Ya están hechas 4 placas de eslabones: por eso dice x12 (faltan 12 de 16).
+Ordenados de MAYOR a MENOR tiempo por impresión. El nombre dice: número, tiempo, pieza y cuántas veces imprimir.
+"xN" = imprimir ese mismo archivo N veces. Ya están hechas 4 placas de eslabones: por eso dice x12 (faltan 12 de 16).
 
- #  Archivo                          Veces  Tiempo c/u   Filamento c/u  Para qué
- 01 01_portarod_motor_ir_x1_v2       1      6 h 46 min   125 g          Rodamientos, motor y sensor IR en la base de madera
- 02 02_pinones_x2_v2                 2      4 h 10 min    70 g          6 piñones (3 por eje)
- 03 03_eslabones_d21_x12_v2          12     5 h 25 min    95 g          Eslabones de la banda (7 por placa)
- 04 04_cama_x5_v2                    5      1 h 57 min    41 g          Cama de deslizamiento bajo la banda
- 05 05_paletas_A_B_x1_v2             1      6 h 06 min   133 g          Las 2 paletas desviadoras
- 06 06_soportes_servo_x1_v2          1      3 h 24 min    67 g          Soportes de los 2 servos MG996R
- 07 07_rampa_lateral_x2_v2           2      4 h 21 min    97 g          Rampas de las salidas 1 y 2
- 08 08_rampa_final_x1_v2             1      5 h 58 min   130 g          Rampa de la salida 3
+ Archivo                                      Veces  Tiempo c/u  Filamento c/u  Para qué
+ 01_6h46_portarod_motor_ir_x1_v2              1      6h46         125 g         Rodamientos, motor y sensor IR en la base de madera
+ 02_6h06_paletas_A_B_x1_v2                    1      6h06         133 g         Las 2 paletas desviadoras
+ 03_5h58_rampa_final_x1_v2                    1      5h58         130 g         Rampa de la salida 3
+ 04_5h25_eslabones_d21_x12_v2                 12     5h25          95 g         Eslabones de la banda (7 por placa)
+ 05_4h21_rampa_lateral_x2_v2                  2      4h21          97 g         Rampas de las salidas 1 y 2
+ 06_4h10_pinones_x2_v2                        2      4h10          70 g         6 piñones (3 por eje)
+ 07_3h24_soportes_servo_x1_v2                 1      3h24          67 g         Soportes de los 2 servos MG996R
+ 08_1h57_cama_x5_v2                           5      1h57          41 g         Cama de deslizamiento bajo la banda
 
 TOTAL: 25 impresiones, ~114 h, ~2,1 kg de PETG.
-Con 2 impresoras: ~57 h cada una (unos 6 días con 2 impresiones al día).
 
 Reparto sugerido entre las 2 impresoras:
-  Impresora 1: 01, 02 (x2), 03 (x6), 05, 07 (x1)              ~58 h
-  Impresora 2: 03 (x6), 04 (x5), 06, 07 (x1), 08              ~56 h
+  Impresora 1: 01, 02, 04 (x6), 05 (x1), 06 (x2)          ~58 h
+  Impresora 2: 03, 04 (x6), 05 (x1), 07, 08 (x5)          ~56 h
 
 Las barandas y la guía de carga NO van en esta carpeta: las manzanas pueden rodar hacia el borde.
-Si al probar la banda se caen, imprimir los archivos 09, 10 y 11 de la carpeta B_con_barandas.
+Si al probar la banda se caen, imprimir guia_carga, barandas_ir y barandas_final de la carpeta B_con_barandas.

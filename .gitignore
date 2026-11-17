@@ -20,3 +20,6 @@ driver/
 
 # Respaldos automáticos de Blender
 *.blend1
+
+# Copias de los G-code ordenadas para el USB (los originales están en gcode_Ender3V3KE_0.4_v2/)
+hardware/3d/manzanas/impresion_usb/**/*.gcode

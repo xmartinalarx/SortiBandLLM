@@ -1,0 +1,24 @@
+SortiBandLLM - B: CON BARANDAS - Creality Ender-3 V2 (Marlin, perilla)
+Copiar esta carpeta a una tarjeta microSD FAT32. PETG blanco, boquilla 0,4 mm.
+
+Ordenados de MAYOR a MENOR tiempo por impresión. El nombre dice: número, tiempo, pieza y cuántas veces imprimir.
+"xN" = imprimir ese mismo archivo N veces (si los eslabones se reparten entre las 2 impresoras, ver REPARTO.txt).
+
+ Archivo                                    Veces  Tiempo c/u  Filamento c/u  Para qué
+ 01_12h35_portarod_motor_ir_x1_E3V2         1      12h35        125 g         Rodamientos, motor y sensor IR en la base de madera
+ 02_11h55_paletas_A_B_x1_E3V2               1      11h55        133 g         Las 2 paletas desviadoras (con brim)
+ 03_10h46_rampa_final_x1_E3V2               1      10h46        130 g         Rampa de la salida 3
+ 04_10h22_eslabones_d21_x12_E3V2            12     10h22         95 g         Eslabones de la banda (7 por placa)
+ 05_8h40_guia_carga_x1_E3V2                 1      8h40          76 g         Guía de carga (embudo): centra la manzana y las pone en fila
+ 06_8h21_barandas_ir_x1_E3V2                1      8h21          75 g         Barandas del tramo del sensor IR (con paso para el haz)
+ 07_8h03_barandas_final_x1_E3V2             1      8h03          70 g         Barandas hasta la paleta 1
+ 08_7h58_rampa_lateral_x2_E3V2              2      7h58          97 g         Rampas de las salidas 1 y 2
+ 09_7h53_pinones_x2_E3V2                    2      7h53          70 g         6 piñones (3 por eje)
+ 10_6h20_soportes_servo_x1_E3V2             1      6h20          67 g         Soportes de los 2 servos MG996R
+ 11_3h38_cama_x5_E3V2                       5      3h38          41 g         Cama de deslizamiento bajo la banda
+
+Si TODO se imprime en esta impresora: 28 impresiones, ~241 h.
+
+Ender-3 V2: no tiene nivelación automática (salvo que le hayan puesto BLTouch).
+Nivelar la cama a mano con un papel en las 4 esquinas antes de la primera impresión.
+Es más lenta que la KE (aceleración 500, extrusor Bowden): por eso los tiempos son casi el doble.

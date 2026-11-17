@@ -1,0 +1,20 @@
+SortiBandLLM - Reparto entre las 2 impresoras (A: sin barandas)
+
+Para terminar lo antes posible con las 2 impresoras a la vez. Ya están hechas 4 placas de eslabones (faltan 12).
+
+Creality Ender-3 V3 KE (Klipper, pantalla táctil)  ->  carpeta Ender3_V3_KE  (~75 h)
+   portarod_motor_ir  x1   (6h46 c/u)
+   rampa_final        x1   (5h58 c/u)
+   eslabones_d21      x8   (5h25 c/u)
+   rampa_lateral      x1   (4h21 c/u)
+   pinones            x2   (4h10 c/u)
+   cama               x3   (1h57 c/u)
+
+Creality Ender-3 V2 (Marlin, perilla)  ->  carpeta Ender3_V2  (~75 h)
+   paletas_A_B        x1   (11h55 c/u)
+   eslabones_d21      x4   (10h22 c/u)
+   rampa_lateral      x1   (7h58 c/u)
+   soportes_servo     x1   (6h20 c/u)
+   cama               x2   (3h38 c/u)
+
+Filamento total: ~2,1 kg de PETG.

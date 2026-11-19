@@ -93,8 +93,19 @@ Write-Host ".env listo (clave nueva de la BD guardada ahi)"
 
 # --- 6. IP de este PC ---
 Paso "6/6 Datos para el PC de la IA y el Arduino"
-$ip = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -match "Wi-?Fi|WLAN" -and $_.IPAddress -notlike "169.*" } | Select-Object -First 1).IPAddress
-Write-Host "IP de este PC-SERVIDOR: $ip" -ForegroundColor Green
+# La IP que usan el Arduino y el PC-IA es la de la zona WiFi TARRO (siempre 192.168.137.1).
+# La del WiFi normal (por donde este PC sale a internet) solo sirve a equipos de esa misma red.
+$tarro = Get-NetIPAddress -AddressFamily IPv4 -IPAddress "192.168.137.1" -ErrorAction SilentlyContinue
+$ipWifi = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -match "^(Wi-?Fi|WLAN)" -and $_.IPAddress -notlike "169.*" -and $_.IPAddress -ne "192.168.137.1" } | Select-Object -First 1).IPAddress
+if ($tarro) {
+    $ip = "192.168.137.1"
+    Write-Host "Zona WiFi TARRO encendida. IP de este PC-SERVIDOR en TARRO: $ip" -ForegroundColor Green
+} else {
+    $ip = "192.168.137.1"
+    Write-Host "[AVISO] La zona WiFi TARRO esta APAGADA: el Arduino y el PC-IA no van a conectarse." -ForegroundColor Yellow
+    Write-Host "        Encenderla: Configuracion > Red e Internet > Zona con cobertura inalambrica movil (2,4 GHz)." -ForegroundColor Yellow
+}
+if ($ipWifi) { Write-Host "(IP en el WiFi normal: $ipWifi; NO usarla en el Arduino ni en el PC-IA si estan en TARRO)" }
 Write-Host "  - En el PC de la IA (.env):  MQTT_HOST=$ip   y   SERVER_URL=http://${ip}:8000"
 Write-Host "  - En el Arduino (secrets.h): MQTT_HOST `"$ip`""
 Write-Host "`nPara levantar el servidor y el dashboard:"

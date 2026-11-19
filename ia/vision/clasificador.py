@@ -62,9 +62,11 @@ class NodoVision:
         self.ultimo_vivo = (0.0, None)    # (momento, resultado) del análisis en vivo
         config.IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
-        # Motor de clasificación: IA (CLIP) u OpenCV, con OpenCV de respaldo
-        print(f"[VISION] Cargando motor '{config.VISION_MOTOR}'...")
-        self.clasificar, self.etiqueta_motor, self.nombre_modelo = crear_motor(self.calib)
+        # Motor de clasificación: IA (SigLIP 2) u OpenCV, con OpenCV de respaldo.
+        # En simulación siempre OpenCV: los círculos dibujados no parecen manzanas para la IA.
+        motor = "opencv" if simular else config.VISION_MOTOR
+        print(f"[VISION] Cargando motor '{motor}'...")
+        self.clasificar, self.etiqueta_motor, self.nombre_modelo = crear_motor(self.calib, motor=motor)
         print(f"[VISION] Motor listo: {self.etiqueta_motor}")
 
         if not simular:
@@ -157,7 +159,8 @@ class NodoVision:
         ms = (time.perf_counter() - inicio) * 1000
         extra = f" (dibujada: {color_real})" if color_real else ""
         print(f"[RESULTADO] manzana {piece_id} ({resultado.get('motor', 'OpenCV')}): {resultado['color']}{extra}, "
-              f"defectuosa={resultado['is_defective']}, conf={resultado['confidence']:.2f} "
+              f"defectuosa={resultado['is_defective']}"
+              f"{' (' + resultado['defecto'] + ')' if resultado.get('defecto') else ''}, conf={resultado['confidence']:.2f} "
               f"-> salida {salida} [{ms:.0f} ms]")
 
         # Para la ventana: la foto tomada, con el rectángulo y la salida

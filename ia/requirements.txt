@@ -1,5 +1,5 @@
 # PC-IA: camara, vision con OpenCV y comunicacion con el servidor.
-# Para la IA (CLIP en la GPU) instalar ademas requirements-ia.txt.
+# Para la IA (SigLIP 2 en la GPU) instalar ademas requirements-ia.txt.
 paho-mqtt>=2.0
 python-dotenv>=1.0
 opencv-python>=4.9

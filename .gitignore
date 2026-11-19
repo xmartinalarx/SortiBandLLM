@@ -21,3 +21,4 @@ driver/
 # Respaldos automáticos de Blender
 *.blend1
 
+*/data/entrenamiento/*

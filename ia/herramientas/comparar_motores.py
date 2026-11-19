@@ -1,4 +1,4 @@
-"""Compara la IA (CLIP) con OpenCV sobre las fotos guardadas en data/imagenes.
+"""Compara la IA (SigLIP 2) con OpenCV sobre las fotos guardadas en data/imagenes.
 
 Muestra, foto por foto, qué decidió cada motor y cuánto tardó. Sirve para revisar
 la IA y como tabla para el informe.
@@ -22,7 +22,7 @@ from vision.modelo_ia import crear_motor
 def resumen(r: dict) -> str:
     if r["color"] == "desconocido":
         return "desconocido"
-    estado = "DEFECT" if r["is_defective"] else "sana"
+    estado = f"DAÑADA ({r.get('defecto') or '?'})" if r["is_defective"] else "sana"
     return f"{r['color']} {r['confidence']:.2f} {estado}"
 
 
@@ -50,7 +50,7 @@ def main():
     ia(cv2.imread(str(fotos[0])))   # la primera pasada carga la GPU: no se cuenta en el tiempo
 
     print(f"Producto: {config.PRODUCTO} | IA: {etiqueta_ia}\n")
-    print(f"{'foto':34} {'OpenCV':26} {'IA':26} {'ms IA':>6}")
+    print(f"{'foto':34} {'OpenCV':26} {'IA':34} {'ms IA':>6}")
     tiempos = []
     for f in fotos:
         img = cv2.imread(str(f))
@@ -61,7 +61,7 @@ def main():
         r_ia = ia(img)
         ms = (time.perf_counter() - t0) * 1000
         tiempos.append(ms)
-        print(f"{f.name:34} {resumen(r_cv):26} {resumen(r_ia):26} {ms:6.0f}")
+        print(f"{f.name:34} {resumen(r_cv):26} {resumen(r_ia):34} {ms:6.0f}")
     print(f"\n{len(tiempos)} fotos. IA: {sum(tiempos) / len(tiempos):.0f} ms promedio, {max(tiempos):.0f} ms máximo.")
 
 

@@ -127,12 +127,12 @@ Es un pulsador común de 4 patas (push button). Va entre **D7** y **GND**:
 | Equipo | Corre | Configuración |
 |---|---|---|
 | **PC-servidor** (Windows) | Carpeta `servidor/`: Mosquitto, MySQL (XAMPP), servidor y dashboard | Desde `servidor/`: `powershell -ExecutionPolicy Bypass -File scripts\instalar_servidor.ps1`: instala todo y muestra su IP |
-| **PC-IA** (con GPU NVIDIA y la webcam) | Carpeta `ia/`: visión con IA (CLIP) | `ia/.env`: `VISION_MOTOR=ia`, `MQTT_HOST=<IP del servidor>`, `SERVER_URL=http://<IP del servidor>:8000` |
+| **PC-IA** (con GPU NVIDIA y la webcam) | Carpeta `ia/`: visión con IA (SigLIP 2) | `ia/.env`: `VISION_MOTOR=ia`, `MQTT_HOST=<IP del servidor>`, `SERVER_URL=http://<IP del servidor>:8000` |
 | **Arduino** | Banda, paletas y sensores | `secrets.h`: `MQTT_HOST` = IP del PC-servidor |
 
 - Los tres en la misma red (hotspot POCOX7Pro, 2,4 GHz).
 - Copiar la carpeta `servidor/` al PC-servidor y la carpeta `ia/` al PC-IA, **sin** `.venv` ni `data\imagenes`. Cada una trae su `LEEME.md` con los pasos.
-- Prueba: en el PC-IA, `python -m vision.clasificador` debe decir `Motor listo: IA clip-vit-base-patch32 (GPU)` y `Configuración leída de http://...`; la foto de cada manzana aparece en el dashboard del PC-servidor.
+- Prueba: en el PC-IA, `python -m vision.clasificador` debe decir `Motor listo: IA siglip2-base-patch16-224 (GPU)` y `Configuración leída de http://...`; la foto de cada manzana aparece en el dashboard del PC-servidor.
 
 ## Parte C — Preparar el PC (una vez)
 

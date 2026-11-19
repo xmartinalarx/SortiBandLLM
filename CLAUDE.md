@@ -28,7 +28,7 @@ Los pequeños productores clasifican la fruta a mano, lo que es lento, cansador 
 - **Producto:** manzanas de 7 a 8,5 cm y 150 a 250 g.
 - **Salidas:** 3. Salida 1 (derecha, paleta 1): defectuosas. Salida 2 (izquierda, paleta 2): grupo de colores A (configurable). Salida 3 (final de la banda): resto.
 - **Flujo:** una manzana a la vez bajo la cámara, separadas al menos ~280 mm.
-- **Clasificación:** la decide un modelo de IA de **Hugging Face** (CLIP zero-shot, `ia/vision/modelo_ia.py`) en el PC-IA, con la GPU. Compara la foto con frases (`ia/vision/prompts_ia.json`) para el color y para sana/dañada. OpenCV (HSV, `ia/vision/analisis.py`) queda de respaldo automático y para recortar el producto. Todo motor respeta el contrato de `ia/vision/analisis.py::clasificar_imagen` (entra una imagen BGR; sale `color`, `is_defective`, `confidence`, `bbox`). Las fotos de cada manzana se guardan sin dibujos en `data/imagenes/` y sirven de dataset.
+- **Clasificación:** la decide un modelo de IA de **Hugging Face** (**SigLIP 2** de Google, `google/siglip2-base-patch16-224`, en `ia/vision/modelo_ia.py`) en el PC-IA, con la GPU. Compara la foto con frases **en español** (`ia/vision/prompts_ia.json`; SigLIP 2 es multilingüe) para el color y para sana/dañada (2 frases de sana y 6 de defectos: golpe, mancha, podrida, herida, gusano, arrugada). Si existe `ia/data/modelo_defectos.npz`, sana/dañada lo decide un modelo entrenado con fotos propias (regresión logística sobre los vectores de SigLIP 2; `herramientas/capturar_fotos.py` + `herramientas/entrenar_defectos.py`). OpenCV (HSV, `ia/vision/analisis.py`) queda de respaldo automático y para recortar el producto. Todo motor respeta el contrato de `ia/vision/analisis.py::clasificar_imagen` (entra una imagen BGR; sale `color`, `is_defective`, `confidence`, `bbox`). Las fotos de cada manzana se guardan sin dibujos en `data/imagenes/` y sirven de dataset.
 - **Prioridad si falta tiempo:** banda y clasificación local → BD y dashboard → supervisión con Ollama. Los reportes en lenguaje natural quedan fuera del MVP.
 
 ## Arquitectura
@@ -36,7 +36,7 @@ Los pequeños productores clasifican la fruta a mano, lo que es lento, cansador 
 | Nodo | Hardware | Función | Comunicación |
 |---|---|---|---|
 | PC-servidor | PC con Windows | Broker Mosquitto, MySQL (XAMPP), API FastAPI y dashboard (y Ollama, fuera del MVP) | Red WiFi |
-| PC-IA | PC con GPU NVIDIA (RTX 3050) + webcam (por ahora la integrada; después la externa del túnel) | Visión: IA de Hugging Face (CLIP) que mira la cámara y decide | MQTT al broker + HTTP al servidor (configuración y fotos) |
+| PC-IA | PC con GPU NVIDIA (RTX 3050) + webcam (por ahora la integrada; después la externa del túnel) | Visión: IA de Hugging Face (SigLIP 2) que mira la cámara y decide | MQTT al broker + HTTP al servidor (configuración y fotos) |
 | Control | Arduino UNO R4 WiFi | Motor 28BYJ-48 (placa ULN2003), 2 servos MG996R, sensor IR y pulsador de emergencia | MQTT por WiFi |
 | Supervisión | Segunda webcam USB en un poste (por confirmar) | Foto de vista general para el supervisor | USB al PC |
 | Usuario | Navegador en PC o celular | Ver datos y controlar la banda | HTTP |
@@ -70,7 +70,7 @@ La clasificación usará una **webcam USB externa** montada en el túnel y conec
 
 ## Reglas de diseño de IA
 
-1. **La clasificación de cada manzana es visión local, no LLM.** Un modelo de Hugging Face (CLIP) corre en la GPU del PC-IA: ~20–50 ms por foto y sin internet una vez descargado. Si la IA no carga o falla, decide OpenCV (`crear_motor` en `ia/vision/modelo_ia.py`).
+1. **La clasificación de cada manzana es visión local, no LLM.** Un modelo de Hugging Face (SigLIP 2) corre en la GPU del PC-IA: ~30 ms por foto en la RTX 3050 y sin internet una vez descargado. Si la IA no carga o falla, decide OpenCV (`crear_motor` en `ia/vision/modelo_ia.py`).
 2. **El LLM es un supervisor asíncrono.** Recibe una foto de la cámara de supervisión cada 10–30 s, o ante un evento (banda en marcha sin manzanas, varias seguidas con baja confianza, alza de defectuosas). Nunca está en el camino crítico.
 3. **Ollama local** en el mismo PC, sin internet ni clave de API. El modelo debe ser de visión (por ejemplo, Gemma 3 o Qwen2.5-VL en versión pequeña).
 4. **Respuesta estructurada:** pasar el esquema JSON en el parámetro `format` de Ollama y usar temperatura 0. Esquema: `{"status": "normal|jam|foreign_object|other", "description": "...", "recommend_stop": true|false}`. Validar el JSON y manejar timeouts y respuestas inválidas.
@@ -83,7 +83,7 @@ La clasificación usará una **webcam USB externa** montada en el túnel y conec
 | Tópico | Publica | Payload |
 |---|---|---|
 | `sorter/sensor/arrival` | Control (manzana centrada bajo la cámara) | `piece_id, ts` |
-| `sorter/vision/result` | Visión (PC-IA) | `piece_id, ts, color, is_defective, confidence, output_channel, image_path, model` (`model` = quién decidió: `openai/clip-vit-base-patch32` u `opencv`) |
+| `sorter/vision/result` | Visión (PC-IA) | `piece_id, ts, color, is_defective, confidence, output_channel, image_path, model` (`model` = quién decidió: `google/siglip2-base-patch16-224` u `opencv`) |
 | `sorter/control/command` | Servidor/web | `action` (`start`, `stop`, `set_speed`, `servo`), `value`; con `servo` además `servo` (1 o 2) y `value` = ángulo |
 | `sorter/control/servo` | Control | `servo, angle, ok, motivo?, ts`: confirma la prueba manual de un servo (solo con la banda detenida) |
 | `sorter/control/status` | Control (retenido; Last Will `{"state":"offline"}`) | `state` (`running`, `stopped`, `emergency`, `offline`), `speed, ts` |
@@ -264,8 +264,8 @@ proyecto-final/
 │   └── requirements.txt, .env.example, LEEME.md
 └── ia/                          # PC-IA (se copia a ese PC; ver ia/LEEME.md)
     ├── comun/                   # config (.env) y tópicos MQTT (+ COLORES): copia de servidor/comun/topicos.py
-    ├── vision/                  # clasificador.py, modelo_ia.py (CLIP), prompts_ia.json, analisis.py (OpenCV), reglas.py, calibrar_hsv.py, listar_camaras.py
-    ├── herramientas/            # comparar_motores.py (IA vs OpenCV)
+    ├── vision/                  # clasificador.py, modelo_ia.py (SigLIP 2), defectos_entrenados.py, prompts_ia.json, analisis.py (OpenCV), reglas.py, calibrar_hsv.py, listar_camaras.py
+    ├── herramientas/            # comparar_motores.py (IA vs OpenCV), capturar_fotos.py y entrenar_defectos.py (sana/dañada con fotos propias)
     ├── tests/                   # pytest
     ├── data/imagenes/           # copia de cada foto (dataset)
     └── requirements.txt, requirements-ia.txt, .env.example, LEEME.md
@@ -321,6 +321,7 @@ Registrar una matriz de confusión (color real vs. clasificado; buena vs. defect
 | MySQL Server → MariaDB de XAMPP (desarrollo) | Ya estaba instalado y no requiere administrador; mismo SQL |
 | Hongo de emergencia → pulsador común (D7 a GND) | Es el botón que tiene el grupo. Detiene por software; no corta la energía |
 | Clasificación OpenCV → IA de Hugging Face (CLIP) con OpenCV de respaldo | El grupo quiere que una IA mire la cámara y decida; CLIP funciona sin entrenar |
+| CLIP (`clip-vit-base-patch32`, frases en inglés) → SigLIP 2 (`siglip2-base-patch16-224`, frases en español) + sana/dañada entrenable con fotos propias | Todo en español; ve 4 veces más detalle (bloques de 16 px), mejor para golpes y manchas chicas. Las frases solas fallan con defectos leves y con manzanas rojas oscuras; el entrenado se ajusta a la cámara y la luz del grupo (2026-11-18) |
 | Un PC → dos (PC-IA con GPU y webcam; PC-servidor con lo demás) | La IA usa la GPU sin competir con la BD y el servidor; suma un nodo a la red IoT |
 | Red de la U → hotspot del celular POCOX7Pro | La red de la U es de 5 GHz y abierta; el R4 solo usa 2,4 GHz. Plan B probado: zona WiFi del PC |
 | Bastidor por diseñar → base de madera (MDF/terciado 1,8 cm) | Más rápida y rígida que imprimir la estructura larga; solo se imprimen porta-rodamientos y soporte del motor (2026-11-16) |
@@ -335,7 +336,8 @@ Registrar una matriz de confusión (color real vs. clasificado; buena vs. defect
 - [x] Producto del MVP: manzanas
 - [x] Proveedor del LLM: Ollama local en el PC
 - [ ] Modelo de visión de Ollama (probar Gemma 3 o Qwen2.5-VL pequeños)
-- [x] Clasificación con IA de Hugging Face: CLIP zero-shot en la GPU (después, opcional: modelo entrenado con las fotos propias)
+- [x] Clasificación con IA de Hugging Face: SigLIP 2 en la GPU, frases en español; sana/dañada entrenada con fotos propias (2026-11-18)
+- [ ] Sacar 30–50 fotos de manzanas sanas y dañadas, entrenar y anotar los aciertos (primero sin túnel; repetir con el túnel armado)
 - [x] Dos equipos: PC-IA (cámara + IA) y PC-servidor (broker, BD, API, dashboard)
 - [x] Salidas: 3, con 2 paletas y servos MG996R
 - [x] Estructura y banda: impresas en 3D (PETG)
@@ -379,6 +381,8 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 **Guía visual de armado:** `docs/conexiones-clasifiot.html` (protoboard paso a paso; se abre en el navegador). Versión en texto: `docs/conexion-paso-a-paso.md`.
 
 ## Problemas conocidos y soluciones
+
+- **`--simular` usa OpenCV aunque `VISION_MOTOR=ia`:** SigLIP 2 no reconoce los círculos dibujados como manzanas (los rojos salían "desconocido").
 
 - **Windows Defender, "acceso controlado a carpetas":** impide que Arduino escriba en *Documentos*. Las librerías van en `C:\Users\<usuario>\Arduino`; en el IDE: *Archivo → Preferencias → Ubicación del sketchbook* = esa carpeta.
 - **Librerías del firmware:** PubSubClient, ArduinoJson y **Servo** (Servo no viene con el paquete UNO R4).
@@ -438,6 +442,8 @@ mosquitto_sub -h localhost -t "sorter/#" -v         # ver todos los mensajes
 python -m vision.clasificador                       # visión con ventana en vivo (motor según VISION_MOTOR: ia u opencv; q = salir)
 python -m vision.clasificador --simular             # visión sin cámara (manzanas dibujadas)
 python -m herramientas.comparar_motores            # IA vs OpenCV en las fotos guardadas, con tiempos
+python -m herramientas.capturar_fotos              # fotos de entrenamiento (s = sana, d = defectuosa, q = salir)
+python -m herramientas.entrenar_defectos           # entrena sana/dañada, muestra aciertos y guarda data/modelo_defectos.npz
 python -m pytest tests                              # pruebas unitarias
 python -m vision.listar_camaras                     # ver qué índice tiene la webcam externa
 python -m vision.calibrar_hsv                       # calibrar la visión con la webcam

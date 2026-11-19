@@ -1,36 +1,46 @@
 {
-  "_nota": "Frases que el modelo CLIP compara con la imagen (en inglés: CLIP entiende mejor). Se pueden ajustar sin tocar el código; reiniciar la visión para aplicar.",
+  "_nota": "Frases que el modelo (SigLIP 2, entiende español) compara con la foto. Cada color o estado puede tener una frase o una lista. Se ajustan sin tocar el código; reiniciar la visión para aplicar. Si existe data/modelo_defectos.npz (python -m herramientas.entrenar_defectos), sana/defectuosa lo decide ese modelo entrenado y no las frases de 'estado'.",
   "manzana": {
     "color": {
-      "rojo": "a photo of a red apple",
-      "verde": "a photo of a green apple",
-      "amarillo": "a photo of a yellow apple"
+      "rojo": ["una foto de una manzana roja"],
+      "verde": ["una foto de una manzana verde"],
+      "amarillo": ["una foto de una manzana amarilla"]
     },
     "nada": [
-      "a photo of an empty white table with no fruit",
-      "a photo of a person",
-      "a photo of a hand"
+      "una foto de una mesa blanca vacía, sin fruta",
+      "una foto de una persona",
+      "una foto de una mano"
     ],
     "estado": {
-      "sana": "a photo of a fresh, healthy apple with smooth skin",
-      "defectuosa": "a photo of a rotten, bruised apple with brown spots"
+      "sana": [
+        "una manzana sana, con la piel lisa y brillante",
+        "una manzana fresca y sin defectos"
+      ],
+      "defectuosa": {
+        "golpe": "una manzana con un golpe o machucón",
+        "mancha": "una manzana con una mancha café u oscura",
+        "podrida": "una manzana podrida",
+        "herida": "una manzana con un corte o una herida en la piel",
+        "gusano": "una manzana con un agujero de gusano",
+        "arrugada": "una manzana arrugada y deshidratada"
+      }
     },
-    "umbral_defecto": 0.6
+    "umbral_defecto": 0.5
   },
   "lata": {
     "color": {
-      "rojo": "a photo of a red soda can",
-      "naranjo": "a photo of an orange soda can",
-      "amarillo": "a photo of a yellow soda can",
-      "verde": "a photo of a green soda can",
-      "azul": "a photo of a blue soda can"
+      "rojo": ["una foto de una lata de bebida roja"],
+      "naranjo": ["una foto de una lata de bebida naranja"],
+      "amarillo": ["una foto de una lata de bebida amarilla"],
+      "verde": ["una foto de una lata de bebida verde"],
+      "azul": ["una foto de una lata de bebida azul"]
     },
     "nada": [
-      "a photo of an empty white table",
-      "a photo of a person",
-      "a photo of a hand"
+      "una foto de una mesa blanca vacía",
+      "una foto de una persona",
+      "una foto de una mano"
     ],
     "estado": null,
-    "umbral_defecto": 0.6
+    "umbral_defecto": 0.5
   }
 }

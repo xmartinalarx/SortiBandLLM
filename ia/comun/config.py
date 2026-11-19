@@ -29,4 +29,10 @@ IMAGES_DIR = (RAIZ / os.getenv("IMAGES_DIR", "data/imagenes")).resolve()
 
 # Motor de visión: "ia" (modelo de Hugging Face) u "opencv" (reglas de color)
 VISION_MOTOR = os.getenv("VISION_MOTOR", "opencv").strip().lower()
-HF_MODELO = os.getenv("HF_MODELO", "openai/clip-vit-base-patch32").strip()
+# SigLIP 2 de Google: entiende español y ve más detalle que CLIP (bloques de 16 px)
+HF_MODELO = os.getenv("HF_MODELO", "google/siglip2-base-patch16-224").strip()
+# Modelo sana/defectuosa entrenado con fotos propias (python -m herramientas.entrenar_defectos).
+# Si no existe, sana/defectuosa se decide con las frases de vision/prompts_ia.json.
+MODELO_DEFECTOS = (RAIZ / os.getenv("MODELO_DEFECTOS", "data/modelo_defectos.npz")).resolve()
+# Fotos para entrenar: data/entrenamiento/sana/ y data/entrenamiento/defectuosa/
+ENTRENAMIENTO_DIR = (RAIZ / os.getenv("ENTRENAMIENTO_DIR", "data/entrenamiento")).resolve()

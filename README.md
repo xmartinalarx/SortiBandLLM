@@ -4,14 +4,14 @@ Proyecto semestral del ramo Internet de las Cosas, del grupo **pythonGroup**: Ma
 Martín Araya, Vicente Pereira y Reinaldo Castillo.
 
 Banda transportadora impresa en 3D que clasifica manzanas por color y defectos (IA de Hugging Face,
-CLIP, con OpenCV de respaldo), las desvía con dos paletas (Arduino UNO R4 WiFi + servos) y registra
+SigLIP 2, con OpenCV de respaldo), las desvía con dos paletas (Arduino UNO R4 WiFi + servos) y registra
 cada una en MySQL. Un dashboard web muestra los datos y controla la banda. El contexto completo está
 en [CLAUDE.md](CLAUDE.md).
 
 > La base de datos y su usuario se siguen llamando `clasifiot` (nombre anterior del proyecto).
 
 ```
-Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- PC-IA: webcam + CLIP / OpenCV
+Arduino R4 (banda) --MQTT--> Mosquitto <--MQTT-- PC-IA: webcam + SigLIP 2 / OpenCV
                                 |                    |
                         API FastAPI <------HTTP------+  (configuración y fotos)
                          |        |

@@ -36,14 +36,14 @@ Los pequeños productores clasifican la fruta a mano, lo que es lento, cansador 
 | Nodo | Hardware | Función | Comunicación |
 |---|---|---|---|
 | PC-servidor | PC con Windows | Broker Mosquitto, MySQL (XAMPP), API FastAPI y dashboard (y Ollama, fuera del MVP) | Red WiFi |
-| PC-IA | PC con GPU NVIDIA (RTX 3050) + webcam (por ahora la integrada; después la externa del túnel) | Visión: IA de Hugging Face (SigLIP 2) que mira la cámara y decide | MQTT al broker + HTTP al servidor (configuración y fotos) |
+| PC-IA | PC con GPU NVIDIA (RTX 3050) + webcam USB externa (`CAMERA_INDEX=1`) | Visión: IA de Hugging Face (SigLIP 2) que mira la cámara y decide | MQTT al broker + HTTP al servidor (configuración y fotos) |
 | Control | Arduino UNO R4 WiFi | Motor 28BYJ-48 (placa ULN2003), 2 servos MG996R, sensor IR y pulsador de emergencia | MQTT por WiFi |
 | Supervisión | Segunda webcam USB en un poste (por confirmar) | Foto de vista general para el supervisor | USB al PC |
 | Usuario | Navegador en PC o celular | Ver datos y controlar la banda | HTTP |
 
 **Dos equipos, dos carpetas:** el código está separado en `servidor/` (se copia al PC-servidor) e `ia/` (se copia al PC-IA). Cada carpeta tiene su `.env`, `requirements.txt`, entorno de Python y `LEEME.md`, y se levanta sola. El PC-IA no toca la BD: lee la configuración con `GET /api/settings` y sube cada foto con `POST /api/imagenes` (`SERVER_URL` y `MQTT_HOST` en `ia/.env` = IP del PC-servidor). Para probar en un solo PC se levantan las dos carpetas con `localhost`. Instalación del PC-servidor: `servidor/scripts/instalar_servidor.ps1`.
 
-La clasificación usará una **webcam USB externa** montada en el túnel y conectada al PC. **Por ahora se usa la webcam integrada del PC** (`CAMERA_INDEX=0`) hasta tener la externa. Evitar la cámara virtual de NVIDIA Broadcast: aplica efectos y cambia los colores. Su índice se configura en `CAMERA_INDEX` (`.env`); para encontrarlo: `python -m vision.listar_camaras`. La Raspberry Pi como nodo de visión independiente queda para una versión posterior.
+La clasificación usará una **webcam USB externa** montada en el túnel y conectada al PC. **Desde el 2026-11-18 el PC-IA usa la webcam USB externa ("USB CAMERA", `CAMERA_INDEX=1`)**; la 0 es la integrada del notebook (HP Wide Vision) y la 2 sale negra (cámara virtual). Evitar la cámara virtual de NVIDIA Broadcast: aplica efectos y cambia los colores. Su índice se configura en `CAMERA_INDEX` (`.env`); para encontrarlo: `python -m vision.listar_camaras`. La Raspberry Pi como nodo de visión independiente queda para una versión posterior.
 
 ### Flujo por manzana
 
@@ -367,7 +367,7 @@ guardadas en el lote 6 (`product = lata`) con su foto.
 | Red | **TARRO**: zona WiFi (2,4 GHz) que crea el **PC-servidor**, desde el 2026-11-12. En ella el PC-servidor tiene siempre la IP **192.168.137.1**, así que `secrets.h` del Arduino e `ia/.env` no cambian más (la contraseña está solo en `secrets.h`, fuera de git). Antes: hotspot del celular POCOX7Pro, que daba IP distintas en cada conexión |
 | Broker | Mosquitto instalado como servicio de Windows, con `listener 1883 0.0.0.0` en su `mosquitto.conf` |
 | BD | MariaDB de XAMPP (compatible con MySQL 8), base `clasifiot` |
-| Visión | Webcam integrada del PC (`CAMERA_INDEX=0`), ventana en vivo con rectángulo; perfil `PRODUCTO=manzana` con `ia/vision/calibracion_manzana.json` (verde desde tono 23) |
+| Visión | Webcam USB externa (`CAMERA_INDEX=1`, desde el 2026-11-18; antes la integrada, 0), ventana en vivo con rectángulo; perfil `PRODUCTO=manzana` con `ia/vision/calibracion_manzana.json` (verde desde tono 23) |
 | Producto de prueba | **Manzana real** desde el 2026-11-05: manzana verde → "verde, sana, 0,99" → salida 3. El perfil `lata` (latas de bebida) queda disponible con `PRODUCTO=lata` |
 | Motor | 28BYJ-48 + ULN2003, 30 mm/s. **No probado con la banda cargada** (riesgo de fuerza) |
 

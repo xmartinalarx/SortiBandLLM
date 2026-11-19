@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1370" viewBox="0 0 1240 1370" font-family="Arial, Helvetica, sans-serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C0392B"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="40.0" y="44.0" font-size="26" font-weight="bold" fill="#1F4E79" text-anchor="start">Laterales de pino 1x4: dónde van los agujeros de los rodamientos</text>
+<text x="40.0" y="72.0" font-size="16" font-weight="normal" fill="#444" text-anchor="start">Medidas en centímetros. Lateral de 112 × 8,9 × 1,9 cm visto por la cara de AFUERA. Los 2 laterales llevan lo mismo.</text>
+<text x="40.0" y="115.0" font-size="20" font-weight="bold" fill="#1F4E79" text-anchor="start">1. Lateral completo</text>
+<rect x="60.0" y="155.0" width="1120.0" height="89.0" fill="#E8C99B" stroke="#8B5A2B" stroke-width="2"/>
+<path d="M64.0 218.8 Q 620.0 214.8 1176.0 218.8" stroke="#D2A86E" fill="none"/>
+<path d="M64.0 196.5 Q 620.0 192.5 1176.0 196.5" stroke="#D2A86E" fill="none"/>
+<path d="M64.0 174.2 Q 620.0 170.2 1176.0 174.2" stroke="#D2A86E" fill="none"/>
+<rect x="103.0" y="172.0" width="34.0" height="14.0" rx="7.0" fill="#FFFFFF" stroke="#1F4E79" stroke-width="2.5"/>
+<circle cx="1120.0" cy="179.0" r="7.0" fill="#FFFFFF" stroke="#1F4E79" stroke-width="2.5"/>
+<circle cx="95.0" cy="205.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="145.0" cy="205.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="95.0" cy="163.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="145.0" cy="163.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="1102.0" cy="205.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="1138.0" cy="205.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="1102.0" cy="163.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="1138.0" cy="163.0" r="3.0" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<text x="60.0" y="145.0" font-size="15" font-weight="bold" fill="#196F3D" text-anchor="start">← punta de CARGA (eje tensor)</text>
+<text x="1180.0" y="145.0" font-size="15" font-weight="bold" fill="#196F3D" text-anchor="end">punta de SALIDA (eje motriz) →</text>
+<line x1="60.0" y1="179.0" x2="60.0" y2="280.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="120.0" y1="179.0" x2="120.0" y2="280.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="60.0" y1="274.0" x2="120.0" y2="274.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="90.0" y="268.0" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">6</text>
+<line x1="60.0" y1="179.0" x2="60.0" y2="312.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1120.0" y1="179.0" x2="1120.0" y2="312.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="60.0" y1="306.0" x2="1120.0" y2="306.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="590.0" y="300.0" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">106</text>
+<line x1="60.0" y1="244.0" x2="60.0" y2="344.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1180.0" y1="244.0" x2="1180.0" y2="344.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="60.0" y1="338.0" x2="1180.0" y2="338.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="620.0" y="332.0" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">112</text>
+<line x1="1180.0" y1="244.0" x2="1216.0" y2="244.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1180.0" y1="155.0" x2="1216.0" y2="155.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1210.0" y1="244.0" x2="1210.0" y2="155.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="1218.0" y="204.5" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="start">8,9</text>
+<text x="360.0" y="184.0" font-size="14" font-weight="normal" fill="#5D4037" text-anchor="start">Centro de los ejes a 6,5 cm del borde de ABAJO (2,4 cm bajo el borde de arriba)</text>
+<text x="40.0" y="410.0" font-size="20" font-weight="bold" fill="#1F4E79" text-anchor="start">2. Detalle de cada punta (escala más grande)</text>
+<text x="140.0" y="455.0" font-size="17" font-weight="bold" fill="#196F3D" text-anchor="start">Punta de CARGA: eje TENSOR (ranura)</text>
+<rect x="140.0" y="470.0" width="442.0" height="302.6" fill="#E8C99B" stroke="#8B5A2B" stroke-width="2"/>
+<path d="M144.0 686.8 Q 361.0 682.8 578.0 686.8" stroke="#D2A86E" fill="none"/>
+<path d="M144.0 611.1 Q 361.0 607.1 578.0 611.1" stroke="#D2A86E" fill="none"/>
+<path d="M144.0 535.5 Q 361.0 531.5 578.0 535.5" stroke="#D2A86E" fill="none"/>
+<rect x="225.0" y="470.0" width="238.0" height="197.2" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6 4"/>
+<rect x="286.2" y="527.8" width="115.6" height="47.6" rx="23.8" fill="#FFFFFF" stroke="#1F4E79" stroke-width="2.5"/>
+<line x1="330.4" y1="551.6" x2="357.6" y2="551.6" stroke="#1F4E79" stroke-width="1"/>
+<line x1="344.0" y1="565.2" x2="344.0" y2="538.0" stroke="#1F4E79" stroke-width="1"/>
+<circle cx="259.0" cy="640.0" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="429.0" cy="640.0" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="259.0" cy="497.2" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="429.0" cy="497.2" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<line x1="140.0" y1="551.6" x2="140.0" y2="808.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="286.2" y1="551.6" x2="286.2" y2="808.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="140.0" y1="802.6" x2="286.2" y2="802.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="213.1" y="796.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">4,3</text>
+<line x1="286.2" y1="515.6" x2="401.8" y2="515.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="344.0" y="509.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">3,4</text>
+<line x1="140.0" y1="551.6" x2="140.0" y2="840.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="344.0" y1="551.6" x2="344.0" y2="840.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="140.0" y1="834.6" x2="344.0" y2="834.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="242.0" y="828.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">6 (centro)</text>
+<line x1="140.0" y1="640.0" x2="140.0" y2="872.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="259.0" y1="640.0" x2="259.0" y2="872.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="140.0" y1="866.6" x2="259.0" y2="866.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="199.5" y="860.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">3,5</text>
+<line x1="140.0" y1="640.0" x2="140.0" y2="904.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="429.0" y1="640.0" x2="429.0" y2="904.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="140.0" y1="898.6" x2="429.0" y2="898.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="284.5" y="892.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">8,5</text>
+<line x1="417.8" y1="575.4" x2="417.8" y2="527.8" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="425.8" y="556.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="start">1,4</text>
+<line x1="286.2" y1="772.6" x2="114.0" y2="772.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="286.2" y1="551.6" x2="114.0" y2="551.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="120.0" y1="772.6" x2="120.0" y2="551.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="112.0" y="667.1" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="end">6,5</text>
+<line x1="259.0" y1="772.6" x2="62.0" y2="772.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="259.0" y1="640.0" x2="62.0" y2="640.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="68.0" y1="772.6" x2="68.0" y2="640.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="60.0" y="711.3" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="end">3,9</text>
+<line x1="259.0" y1="497.2" x2="62.0" y2="497.2" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="259.0" y1="470.0" x2="62.0" y2="470.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="68.0" y1="497.2" x2="68.0" y2="470.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="60.0" y="488.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="end">0,8</text>
+<text x="650.0" y="455.0" font-size="17" font-weight="bold" fill="#196F3D" text-anchor="start">Punta de SALIDA: eje MOTRIZ (agujero)</text>
+<rect x="650.0" y="470.0" width="442.0" height="302.6" fill="#E8C99B" stroke="#8B5A2B" stroke-width="2"/>
+<path d="M654.0 686.8 Q 871.0 682.8 1088.0 686.8" stroke="#D2A86E" fill="none"/>
+<path d="M654.0 611.1 Q 871.0 607.1 1088.0 611.1" stroke="#D2A86E" fill="none"/>
+<path d="M654.0 535.5 Q 871.0 531.5 1088.0 535.5" stroke="#D2A86E" fill="none"/>
+<rect x="803.0" y="470.0" width="170.0" height="197.2" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6 4"/>
+<circle cx="888.0" cy="551.6" r="23.8" fill="#FFFFFF" stroke="#1F4E79" stroke-width="2.5"/>
+<line x1="874.4" y1="551.6" x2="901.6" y2="551.6" stroke="#1F4E79" stroke-width="1"/>
+<line x1="888.0" y1="565.2" x2="888.0" y2="538.0" stroke="#1F4E79" stroke-width="1"/>
+<circle cx="826.8" cy="640.0" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="949.2" cy="640.0" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="826.8" cy="497.2" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<circle cx="949.2" cy="497.2" r="5.1" fill="#2E86C1" stroke="#1B4F72" stroke-width="1.5"/>
+<line x1="888.0" y1="551.6" x2="888.0" y2="808.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1092.0" y1="551.6" x2="1092.0" y2="808.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="888.0" y1="802.6" x2="1092.0" y2="802.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="990.0" y="796.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">6</text>
+<line x1="826.8" y1="640.0" x2="826.8" y2="840.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="949.2" y1="640.0" x2="949.2" y2="840.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="826.8" y1="834.6" x2="949.2" y2="834.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="888.0" y="828.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">3,6</text>
+<line x1="949.2" y1="640.0" x2="949.2" y2="872.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1092.0" y1="640.0" x2="1092.0" y2="872.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="949.2" y1="866.6" x2="1092.0" y2="866.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="1020.6" y="860.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="middle">4,2</text>
+<text x="888.0" y="517.6" font-size="15" font-weight="bold" fill="#1F4E79" text-anchor="middle">Ø 1,4</text>
+<line x1="911.8" y1="772.6" x2="1118.0" y2="772.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="911.8" y1="551.6" x2="1118.0" y2="551.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1112.0" y1="772.6" x2="1112.0" y2="551.6" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="1120.0" y="667.1" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="start">6,5</text>
+<line x1="949.2" y1="772.6" x2="1170.0" y2="772.6" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="949.2" y1="640.0" x2="1170.0" y2="640.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1164.0" y1="772.6" x2="1164.0" y2="640.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="1172.0" y="711.3" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="start">3,9</text>
+<line x1="949.2" y1="497.2" x2="1170.0" y2="497.2" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="949.2" y1="470.0" x2="1170.0" y2="470.0" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="1164.0" y1="497.2" x2="1164.0" y2="470.0" stroke="#C0392B" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="1172.0" y="488.6" font-size="15" font-weight="bold" fill="#C0392B" text-anchor="start">0,8</text>
+<text x="888.0" y="897.6" font-size="14" font-weight="normal" fill="#444" text-anchor="middle">(el agujero está a 106 cm de la punta de carga)</text>
+<rect x="60" y="946" width="34" height="16" rx="8" fill="#fff" stroke="#1F4E79" stroke-width="2.5"/>
+<text x="104.0" y="960.0" font-size="15" font-weight="normal" fill="#222" text-anchor="start">Ranura o agujero del eje, pasado de lado a lado (broca de paleta de 14 mm)</text>
+<circle cx="77" cy="982" r="6" fill="#2E86C1" stroke="#1B4F72"/>
+<text x="104.0" y="988.0" font-size="15" font-weight="normal" fill="#222" text-anchor="start">Agujero guía para tornillo (broca de 3 mm, 2 cm de hondo)</text>
+<rect x="60" y="1004" width="34" height="18" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="104.0" y="1018.0" font-size="15" font-weight="normal" fill="#222" text-anchor="start">Contorno del porta-rodamiento impreso (va por AFUERA, al ras del borde de arriba)</text>
+<text x="40.0" y="1060.0" font-size="20" font-weight="bold" fill="#1F4E79" text-anchor="start">3. Corte por el eje (visto desde la punta)</text>
+<rect x="120" y="1102.8" width="36.4" height="166.4" fill="#FFFFFF" stroke="#555" stroke-dasharray="4 3"/>
+<rect x="175" y="1123.6" width="49.4" height="231.4" fill="#E8C99B" stroke="#8B5A2B" stroke-width="2"/>
+<rect x="224.4" y="1123.6" width="31.200000000000003" height="150.8" fill="#D6EAF8" stroke="#1F4E79" stroke-width="2"/>
+<rect x="224.4" y="1157.4" width="18.98" height="57.2" fill="#BDBDBD" stroke="#424242" stroke-width="1.5"/>
+<rect x="105" y="1175.6" width="175.60000000000002" height="20.8" fill="#7F8C8D" stroke="#2C3E50"/>
+<text x="138.2" y="1092.4" font-size="13" font-weight="normal" fill="#555" text-anchor="middle">piñón</text>
+<text x="95.0" y="1290.0" font-size="14" font-weight="bold" fill="#196F3D" text-anchor="end">ADENTRO</text>
+<text x="95.0" y="1308.0" font-size="13" font-weight="normal" fill="#196F3D" text-anchor="end">(banda)</text>
+<text x="290.6" y="1303.0" font-size="14" font-weight="bold" fill="#196F3D" text-anchor="start">AFUERA</text>
+<text x="290.6" y="1137.6" font-size="13" font-weight="normal" fill="#1F4E79" text-anchor="start">porta-rodamiento impreso (1,2 cm)</text>
+<text x="290.6" y="1191.0" font-size="13" font-weight="normal" fill="#2C3E50" text-anchor="start">← eje de 8 mm</text>
+<text x="290.6" y="1224.0" font-size="13" font-weight="normal" fill="#424242" text-anchor="start">rodamiento 608, apoyado en la madera</text>
+<text x="199.7" y="1277.0" font-size="13" font-weight="normal" fill="#5D4037" text-anchor="middle">lateral</text>
+<text x="199.7" y="1293.0" font-size="13" font-weight="normal" fill="#5D4037" text-anchor="middle">1,9</text>
+<text x="560.0" y="1060.0" font-size="20" font-weight="bold" fill="#1F4E79" text-anchor="start">4. Cómo hacerlo</text>
+<text x="560.0" y="1092.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">1. Junten los 2 laterales con prensas, bien alineados, y marquen todo desde la punta de CARGA.</text>
+<text x="560.0" y="1117.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">2. Taladren los dos juntos: así los ejes quedan a la misma altura en ambos lados.</text>
+<text x="560.0" y="1142.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">3. Motriz: agujero de 14 mm (broca de paleta) en x = 106, a 6,5 cm del borde de abajo.</text>
+<text x="560.0" y="1167.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">4. Tensor: dos agujeros de 14 mm en x = 5 y x = 7, y saquen la madera entre ellos</text>
+<text x="560.0" y="1192.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">    (caladora o lima): queda una ranura de 3,4 × 1,4 cm.</text>
+<text x="560.0" y="1217.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">5. Pongan el porta-rodamiento encima, al ras arriba, y marquen los 4 tornillos con él.</text>
+<text x="560.0" y="1242.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">6. Guías de 3 mm y tornillos para madera de 4 × 25 mm (4 por pieza, 16 en total).</text>
+<text x="560.0" y="1267.0" font-size="14.5" font-weight="normal" fill="#222" text-anchor="start">7. Tensor: atornillen con el eje al centro; para tensar, suelten y córranlo hasta ±1 cm.</text>
+<text x="560.0" y="1292.0" font-size="14.5" font-weight="bold" fill="#C0392B" text-anchor="start">Ojo: el eje va a 6,5 cm del borde de abajo del lateral, aunque pongan suplementos.</text>
+</svg>
